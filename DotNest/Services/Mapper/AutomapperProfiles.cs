@@ -1,4 +1,5 @@
-﻿using DotNest.Models;
+﻿using DotNest.DataAccess.Entities;
+using DotNest.Models;
 
 namespace DotNest.Services.Mapper
 {
@@ -6,7 +7,7 @@ namespace DotNest.Services.Mapper
     {
         public AutomapperProfiles()
         {
-            //CreateMap<RegisterModel, User>()
+            CreateMap<RegisterModel, User>();
         }
     }
 }

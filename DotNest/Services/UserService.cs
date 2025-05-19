@@ -24,40 +24,47 @@ namespace DotNest.Services
         {
             // get user with username
             // if null => return null
+            User? user = _userRepository.GetByUsername(model.Username);
 
-            //var salt = Convert.FromBase64String(dbUser.PwdSalt);
-            //var b64Hash = GenerateHash(password, salt);
-
-            //if (dbUser.PwdHash != b64Hash)
+            if (user is null)
                 return null;
 
-            // return the username
+            var salt = Convert.FromBase64String(user.PasswordSalt);
+            var b64Hash = GenerateHash(model.Password, salt);
+
+            if (user.HashedPassword != b64Hash)
+                return null;
+
+            return user.Username;
         }
 
         public void RegisterUser(RegisterModel model)
         {
             // check if there is a user with the same username or email => throw invalidOpExp
-
-            // like below but in a better way
-            //if (dbUsers.Any(x => x.Username.Equals(normalizedUsername)))
-            //    throw new InvalidOperationException("Username already exists");
-            //if (dbUsers.Any(x => x.Email.Equals(normalizedEmail)))
-            //    throw new InvalidOperationException("Email already exists");
+            if (_userRepository.GetByUsername(model.Username) is not null)
+            {
+                throw new InvalidOperationException("The username already exists");
+            }
+            if (_userRepository.GetByEmail(model.Email) is not null)
+            {
+                throw new InvalidOperationException("The email already exists");
+            }
 
             // Password: Salt and hash password
             (byte[] salt, string b64Salt) = GenerateSalt();
 
             string b64Hash = GenerateHash(model.Password, salt);
 
-            /*
+
             var newUser = new User
             {
-                Username = request.Username,
-                Email = request.Email,
-                PwdSalt = b64Salt,
-                PwdHash = b64Hash
+                Username = model.Username,
+                Email = model.Email,
+                PasswordSalt = b64Salt,
+                HashedPassword = b64Hash
             };
-            */
+            _userRepository.Create(newUser);
+
         }
 
 

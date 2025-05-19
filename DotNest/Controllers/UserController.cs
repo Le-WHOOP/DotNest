@@ -34,6 +34,11 @@ namespace DotNest.Controllers
 
         public ActionResult Register()
         {
+            string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (username is not null)
+                return RedirectToAction("Index");
+
             return View();
         }
 
@@ -42,13 +47,19 @@ namespace DotNest.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel register)
         {
+            string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (username is not null)
+                return RedirectToAction("Index");
+
             if (!ModelState.IsValid)
                 return View(register);
 
             try
             {
                 //var userRequest = VMRegisterMapper.MapToBL(register);
-                //_userService.Register(userRequest);
+                _userService.RegisterUser(register);
+
 
 
                 return RedirectToAction(nameof(Login));
@@ -64,8 +75,6 @@ namespace DotNest.Controllers
         //GET
         public ActionResult Login()
         {
-            //User? truc = _userService.Test("truc");
-
             string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
 
             if (username is not null)
@@ -87,22 +96,24 @@ namespace DotNest.Controllers
             if (!ModelState.IsValid)
                 return View(login);
 
+            username = _userService.GetUserFromLogin(login);
+
             //var user = _userRepository.GetConfirmedUser(
             //    login.Username,
             //    login.Password);
 
-            //if (user == null)
-            //{
-            //    ModelState.AddModelError("Username", "Invalid username or password");
-            //    return View(login);
-            //}
+            if (username == null)
+            {
+                ModelState.AddModelError("Username", "Invalid username or password");
+                return View(login);
+            }
 
-            //var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Username) };
-            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            //HttpContext.SignInAsync(
-            //    CookieAuthenticationDefaults.AuthenticationScheme,
-            //    new ClaimsPrincipal(claimsIdentity),
-            //    new AuthenticationProperties()).Wait();
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties()).Wait();
 
             return RedirectToAction(nameof(Index));
         }
