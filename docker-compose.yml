@@ -20,8 +20,14 @@ services:
       service: dotnest
     depends_on:
       - sqlserver
+    environment:
+      ConnectionStrings__SqlServer: Server=sqlserver,1433;Database=DotNestDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;
+    networks:
+      - dotnest-database
 
   sqlserver:
     extends:
-      file: DotNest/docker-compose.yml
+      file: Database/docker-compose.yml
       service: sqlserver
+    networks:
+      - dotnest-database

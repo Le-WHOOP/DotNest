@@ -1,30 +1,6 @@
-volumes:
-  sqlserver-database:
-
-networks:
-  dotnest-database:
-
 services:
 
   dotnest:
     build:
       context: ./
       dockerfile: Dockerfile
-    depends_on:
-      - sqlserver
-    environment:
-      ConnectionStrings__SqlServer: Server=sqlserver,1433;Database=DotNestDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;
-    networks:
-      - dotnest-database
-
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    expose:
-      - "1433"
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "Your_password123"
-    volumes:
-      - sqlserver-data:/var/opt/mssql
-    networks:
-      - dotnest-database
