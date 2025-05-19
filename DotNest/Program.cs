@@ -40,13 +40,19 @@ public static class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler("/StatusCode/500");
+            app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
+        // for status code
+        app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
+        app.UseExceptionHandler("/StatusCode/500");
+
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseStaticFiles();
 
         app.UseAuthorization();
 
