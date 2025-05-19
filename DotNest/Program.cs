@@ -1,8 +1,10 @@
+using DotNest.DataAccess.Entities;
 using DotNest.DataAccess.Interfaces;
 using DotNest.DataAccess.Repositories;
 using DotNest.Services;
 using DotNest.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNest;
 
@@ -19,10 +21,10 @@ public static class Program
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
-        //builder.Services.AddDbContext<PostgresContext>(options =>
-        //{
-        //    options.UseSqlServer("Name=ConnectionStrings:SqlServer");
-        //});
+        builder.Services.AddDbContext<DotNestContext>(options =>
+        {
+            options.UseSqlServer("Name=ConnectionStrings:SqlServer");
+        });
 
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

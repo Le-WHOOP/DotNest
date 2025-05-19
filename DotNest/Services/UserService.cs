@@ -1,4 +1,6 @@
-﻿using DotNest.Models;
+﻿using DotNest.DataAccess.Entities;
+using DotNest.DataAccess.Interfaces;
+using DotNest.Models;
 using DotNest.Services.Interfaces;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,15 @@ namespace DotNest.Services
 {
     public class UserService : IUserService
     {
+        private readonly IUserRepository _userRepository;
+
+
+        public UserService(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
+
         // TODO inject repository
         public string? GetUserFromLogin(LoginModel model)
         {
@@ -50,6 +61,10 @@ namespace DotNest.Services
         }
 
 
+        public User? Test(string v)
+        {
+            return _userRepository.GetByUsername(v);
+        }
 
 
         #region Security related functions
@@ -85,6 +100,7 @@ namespace DotNest.Services
 
             return (salt, b64Salt);
         }
+
         #endregion
     }
 }

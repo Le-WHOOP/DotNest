@@ -1,4 +1,5 @@
-﻿using DotNest.Models;
+﻿using DotNest.DataAccess.Entities;
+using DotNest.Models;
 
 namespace DotNest.Services.Interfaces
 {
@@ -7,5 +8,6 @@ namespace DotNest.Services.Interfaces
         public void RegisterUser(RegisterModel model);
 
         public string? GetUserFromLogin(LoginModel model);
+        User? Test(string v);
     }
 }

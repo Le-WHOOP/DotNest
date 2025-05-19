@@ -8,6 +8,7 @@ using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using static System.Net.Mime.MediaTypeNames;
 using DotNest.Services.Interfaces;
+using DotNest.DataAccess.Entities;
 
 namespace DotNest.Controllers
 {
@@ -63,6 +64,8 @@ namespace DotNest.Controllers
         //GET
         public ActionResult Login()
         {
+            //User? truc = _userService.Test("truc");
+
             string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
 
             if (username is not null)
