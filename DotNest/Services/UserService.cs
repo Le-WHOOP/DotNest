@@ -31,8 +31,8 @@ namespace DotNest.Services
                 return false;
 
 
-            var salt = Convert.FromBase64String(user.PasswordSalt);
-            var b64Hash = GenerateHash(model.Password, salt);
+            byte[] salt = Convert.FromBase64String(user.PasswordSalt);
+            string b64Hash = GenerateHash(model.Password, salt);
 
             if (user.HashedPassword != b64Hash)
                 return false;
@@ -98,8 +98,8 @@ namespace DotNest.Services
         /// <returns></returns>
         private static (byte[], string) GenerateSalt()
         {
-            var salt = RandomNumberGenerator.GetBytes(128 / 8);
-            var b64Salt = Convert.ToBase64String(salt);
+            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
+            string b64Salt = Convert.ToBase64String(salt);
 
             return (salt, b64Salt);
         }
