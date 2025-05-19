@@ -1,14 +1,10 @@
 ﻿using DotNest.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using DotNest.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Web;
-using Microsoft.AspNetCore.Authorization;
-using static System.Net.Mime.MediaTypeNames;
-using DotNest.Services.Interfaces;
-using DotNest.DataAccess.Entities;
 
 namespace DotNest.Controllers
 {
@@ -34,11 +30,14 @@ namespace DotNest.Controllers
 
         public ActionResult Register()
         {
-            string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+            // check whether the user is already logged in
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
 
             if (username is not null)
                 return RedirectToAction("Index");
 
+
+            // the user is not logged in, they can see the log in form
             return View();
         }
 
@@ -47,27 +46,28 @@ namespace DotNest.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel register)
         {
-            string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+            // check whether the user is already logged in 
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
 
             if (username is not null)
                 return RedirectToAction("Index");
 
+
+            // the user is not logged in, they can submit the form
             if (!ModelState.IsValid)
                 return View(register);
 
             try
             {
-                //var userRequest = VMRegisterMapper.MapToBL(register);
                 _userService.RegisterUser(register);
 
-
-
+                // the user has created their account, they can now log in
                 return RedirectToAction(nameof(Login));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("Username", ex.Message);
-                return View(register);
+                ModelState.AddModelError("Username", ex.Message); // show an error message under the username field
+                return View(register); // show the view with the submitted info
             }
 
         }
@@ -75,11 +75,13 @@ namespace DotNest.Controllers
         //GET
         public ActionResult Login()
         {
-            string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+            // check whether the user is already logged in 
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
 
             if (username is not null)
                 return RedirectToAction("Index");
 
+            // the user is not logged in, they can see the form
             return View();
         }
 
@@ -88,27 +90,25 @@ namespace DotNest.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel login)
         {
-            string? username = _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+            // check whether the user is already logged in 
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
 
             if (username is not null)
                 return RedirectToAction("Index");
 
+
+            // the user is not logged in, they can submit the form
             if (!ModelState.IsValid)
                 return View(login);
 
-            username = _userService.GetUserFromLogin(login);
-
-            //var user = _userRepository.GetConfirmedUser(
-            //    login.Username,
-            //    login.Password);
-
-            if (username == null)
+            if (!_userService.ConfirmLoginValues(login))
             {
                 ModelState.AddModelError("Username", "Invalid username or password");
                 return View(login);
             }
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+            // add the user to the context
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, login.Username) };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,

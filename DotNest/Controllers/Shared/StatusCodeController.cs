@@ -8,11 +8,15 @@ namespace DotNest.Controllers.Shared
         [HttpGet("/StatusCode/{statusCode}")]
         public IActionResult Index(int statusCode)
         {
-            if (statusCode == 404)
+            switch (statusCode)
             {
-                return View("404");
+                case 401:
+                    return View("404");
+                case 500:
+                    return View("500");
+                default:
+                    return View("Default");
             }
-            return View("Default");
         }
         
     }

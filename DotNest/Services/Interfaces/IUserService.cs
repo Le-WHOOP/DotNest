@@ -7,7 +7,6 @@ namespace DotNest.Services.Interfaces
     {
         public void RegisterUser(RegisterModel model);
 
-        public string? GetUserFromLogin(LoginModel model);
-        User? Test(string v);
+        public bool ConfirmLoginValues(LoginModel model);
     }
 }

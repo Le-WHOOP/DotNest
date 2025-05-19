@@ -18,24 +18,26 @@ namespace DotNest.Services
             _userRepository = userRepository;
         }
 
-
-        // TODO inject repository
-        public string? GetUserFromLogin(LoginModel model)
+        /// <summary>
+        /// Checks whether the login values are correct (matching username/password)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public bool ConfirmLoginValues(LoginModel model)
         {
-            // get user with username
-            // if null => return null
             User? user = _userRepository.GetByUsername(model.Username);
 
             if (user is null)
-                return null;
+                return false;
+
 
             var salt = Convert.FromBase64String(user.PasswordSalt);
             var b64Hash = GenerateHash(model.Password, salt);
 
             if (user.HashedPassword != b64Hash)
-                return null;
+                return false;
 
-            return user.Username;
+            return true;
         }
 
         public void RegisterUser(RegisterModel model)
@@ -65,12 +67,6 @@ namespace DotNest.Services
             };
             _userRepository.Create(newUser);
 
-        }
-
-
-        public User? Test(string v)
-        {
-            return _userRepository.GetByUsername(v);
         }
 
 
