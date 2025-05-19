@@ -10,7 +10,7 @@ namespace DotNest.Controllers.Shared
         {
             switch (statusCode)
             {
-                case 401:
+                case 404:
                     return View("404");
                 case 500:
                     return View("500");
