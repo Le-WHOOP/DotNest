@@ -1,3 +1,9 @@
+using DotNest.DataAccess.Interfaces;
+using DotNest.DataAccess.Repositories;
+using DotNest.Services;
+using DotNest.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace DotNest;
 
 public static class Program
@@ -8,6 +14,19 @@ public static class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        // repositories
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+        // services
+        builder.Services.AddScoped<IUserService, UserService>();
+
 
         WebApplication app = builder.Build();
 
@@ -28,8 +47,9 @@ public static class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
+            pattern: "{controller=User}/{action=Login}/{id?}")
             .WithStaticAssets();
+       
 
         app.Run();
     }
