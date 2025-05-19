@@ -5,6 +5,10 @@ VisualStudioVersion = 17.13.35825.156 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{6EDFDCE6-E77E-4B97-BF3D-0F34AB0E7729}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNest", "DotNest\DotNest.csproj", "{34AA6A1F-D80E-4FB8-8A27-AC3BC2BDD917}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotTest", "DotTest\DotTest.csproj", "{078E39FC-7DDF-4581-926A-1CC1FA144B76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,14 @@ Global
 		{6EDFDCE6-E77E-4B97-BF3D-0F34AB0E7729}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EDFDCE6-E77E-4B97-BF3D-0F34AB0E7729}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6EDFDCE6-E77E-4B97-BF3D-0F34AB0E7729}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{34AA6A1F-D80E-4FB8-8A27-AC3BC2BDD917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34AA6A1F-D80E-4FB8-8A27-AC3BC2BDD917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34AA6A1F-D80E-4FB8-8A27-AC3BC2BDD917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34AA6A1F-D80E-4FB8-8A27-AC3BC2BDD917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{078E39FC-7DDF-4581-926A-1CC1FA144B76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{078E39FC-7DDF-4581-926A-1CC1FA144B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{078E39FC-7DDF-4581-926A-1CC1FA144B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{078E39FC-7DDF-4581-926A-1CC1FA144B76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

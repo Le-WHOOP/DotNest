@@ -1,0 +1,27 @@
+volumes:
+  sqlserver-data:
+
+networks:
+  dotnest:
+  dotnest-database:
+
+services:
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+    networks:
+      - dotnest
+
+  dotnest:
+    extends:
+      file: DotNest/docker-compose.yml
+      service: dotnest
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    extends:
+      file: DotNest/docker-compose.yml
+      service: sqlserver
