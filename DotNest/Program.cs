@@ -19,6 +19,11 @@ public static class Program
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
+        //builder.Services.AddDbContext<PostgresContext>(options =>
+        //{
+        //    options.UseSqlServer("Name=ConnectionStrings:SqlServer");
+        //});
+
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         // repositories

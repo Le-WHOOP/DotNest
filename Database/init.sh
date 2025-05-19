@@ -5,7 +5,7 @@ set -e
 /opt/mssql/bin/sqlservr &
 
 echo "Waiting for SQL Server to start..."
-sleep 10
+sleep 20
 
 # Check if a known table exists
 initialized=$(/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -h -1 -W -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.tables WHERE name = 'Users'" -C)

@@ -31,3 +31,5 @@ services:
       service: sqlserver
     networks:
       - dotnest-database
+    ports:
+      - 1433:1433
