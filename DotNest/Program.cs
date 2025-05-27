@@ -23,16 +23,19 @@ public static class Program
 
         builder.Services.AddDbContext<DotNestContext>(options =>
         {
-            options.UseSqlServer("Name=ConnectionStrings:SqlServer");
+            options.UseLazyLoadingProxies().UseSqlServer("Name=ConnectionStrings:SqlServer");
         });
 
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         // repositories
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+        builder.Services.AddScoped<IPictureRepository, PictureRepository>();
 
         // services
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IRentalService, RentalService>();
 
 
         WebApplication app = builder.Build();
