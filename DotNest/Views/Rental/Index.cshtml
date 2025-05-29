@@ -1,7 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Rentals";
+﻿@model IEnumerable<DotNest.Models.RentalModel>
+
+@{
+    ViewData["Title"] = "Index";
 }
 
-<div class="container">
-    <h1>List of Rentals</h1>
+<h1>Your properties</h1>
+<br />
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add a new property</a>
+</p>
+<br />
+
+<div class="row">
+    @foreach (var item in Model) {
+        <div class="col-6">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <img src="data:image/png;base64,@item.PictureContent" style="max-width:400px; max-height: 200px" />
+                        <div class="mx-3">
+                            <p class="card-title">@item.Name</p>
+                            <p class="card-text">@item.City</p>
+                            <br />
+                            @Html.ActionLink("Edit", "Update", new { id = item.Id }, new { @class = "btn btn-info" })
+
+                        </div>
+                    </div>
+                    <p class="card-text">@item.Description</p>
+                    <button class="accordion">Reservations</button>
+                    <div class="panel">
+                       <p>TODO DISPLAY BOOKINGS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
 </div>
+
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        /* Toggle between adding and removing the "active" class,
+        to highlight the button that controls the panel */
+        this.classList.toggle("active");
+
+        /* Toggle between hiding and showing the active panel */
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } else {
+          panel.style.display = "block";
+        }
+      });
+    }
+</script>
