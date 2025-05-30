@@ -20,6 +20,19 @@ namespace DotNest.Services
             _userRepository = userRepository;
         }
 
+        public int GetIdFromUsername(string? username)
+        {
+            if (username == null)
+                return -1;
+
+            User? user = _userRepository.GetByUsername(username);
+
+            if (user == null)
+                return -1;
+
+            return user.Id;
+        }
+
         /// <summary>
         /// Checks whether the login values are correct (matching username/password)
         /// </summary>

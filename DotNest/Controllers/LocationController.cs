@@ -10,12 +10,18 @@ namespace DotNest.Controllers
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly ILocationService _locationService;
         private readonly IRentalService _rentalService;
+        private readonly IUserService _userService;
 
-        public LocationController(IHttpContextAccessor contextAccessor, ILocationService locationService, IRentalService rentalService)
+        public LocationController(
+            IHttpContextAccessor contextAccessor,
+            ILocationService locationService,
+            IRentalService rentalService,
+            IUserService userService)
         {
             _contextAccessor = contextAccessor;
             _locationService = locationService;
             _rentalService = rentalService;
+            _userService = userService;
         }
 
         // List of all the rentals available
@@ -50,7 +56,7 @@ namespace DotNest.Controllers
             string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
             bool isLoggedIn = User.Identity != null && User.Identity.IsAuthenticated;
 
-            int userId = _locationService.GetIdFromUsername(username);
+            int userId = _userService.GetIdFromUsername(username);
 
             bool isOwner = userId != -1;
 
