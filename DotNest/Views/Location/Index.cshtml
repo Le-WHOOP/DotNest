@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>All available rentals</h1>
+
+<div class="rows">
+    @foreach (var item in Model)
+    {
+        <div class="col-6">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <img src="data:image/png;base64,@item.PictureContent" style="max-width:400px; max-height: 200px" />
+                        <div class="mx-3">
+                            <p class="card-title">@item.Name</p>
+                            <p class="card-text">@item.City</p>
+                            <br/>
+                            @Html.ActionLink("Details", "Detail", new { id = item.Id }, new { @class = "btn btn-info" })
+                        </div>
+                    </div>
+                    <p class="card-text">@item.Description</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

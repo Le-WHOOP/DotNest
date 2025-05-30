@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Details";
+    bool isOwner = ViewData["IsOwner"] as bool? ?? false;
+    bool isLoggedIn = ViewData["IsLoggedIn"] as bool? ?? false;
+}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card text-center border-secondary" style="max-width: 400px;">
+        <img src="data:image/png;base64,@Model.PictureContent" class="card-img-top" style="max-width:400px; max-height: 200px" />
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+
+            <h6 class="card-subtitle mb-2 text-body-secondary">City</h6>
+            <p class="card-text">@Model.City</p>
+
+            <h6 class="card-subtitle mb-2 text-body-secondary">Description</h6>
+            <p class="card-text">@Model.Description</p>
+
+            <h6 class="card-subtitle mb-2 text-body-secondary">Disponibilities</h6>
+            <p class="card-text">Not implemented yet</p>
+
+            @if (!isLoggedIn)
+            {
+                <form asp-controller="User" asp-action="Login" method="get">
+                    <button type="submit" class="btn btn-primary">Log in to book</button>
+                </form>
+            }
+            else if (isOwner)
+            {
+                <button class="btn btn-secondary" disabled>This rental is yours</button>
+            }
+            else
+            {
+                <button class="btn btn-secondary" disabled>Not implemented yet</button>
+            }
+        </div>
+    </div>
+</div>
