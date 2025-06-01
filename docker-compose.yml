@@ -13,6 +13,8 @@ services:
       - ./nginx:/etc/nginx/conf.d:ro
     networks:
       - dotnest
+    ports:
+      - 8080:80
 
   dotnest:
     extends:
@@ -23,6 +25,7 @@ services:
     environment:
       ConnectionStrings__SqlServer: Server=sqlserver,1433;Database=DotNestDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;
     networks:
+      - dotnest
       - dotnest-database
 
   sqlserver:
