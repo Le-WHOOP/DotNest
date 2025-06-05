@@ -35,5 +35,31 @@ namespace DotNest.Services.Mapper
                 PictureId = pictureId
             };
         }
+
+        public static List<RentalItemListModel> MapToItemListModel(List<Rental> rentals)
+        {
+            return rentals.Select(MapToItemListModel).ToList();
+        }
+
+        public static RentalItemListModel MapToItemListModel(Rental entity)
+        {
+            return new RentalItemListModel()
+            {
+                Id = entity.Id,
+                UserId = entity.UserId,
+                Name = entity.Name,
+                Description = entity.Description,
+                City = entity.City,
+                PictureContent = entity.Picture!.Base64,
+                FutureBookings = entity.Bookings.Select(booking => new BookingItemListModel
+                {
+                    UserName = booking.User.Username,
+                    FromDate = booking.FromDate,
+                    ToDate = booking.ToDate
+                }).ToList()
+                //FutureBookings = new()
+            }
+            ;
+        }
     }
 }

@@ -11,15 +11,18 @@ namespace DotNest.Services
         private readonly IRentalRepository _rentalRepository;
         private readonly IUserRepository _userRepository;
         private readonly IPictureRepository _pictureRepository;
+        private readonly IBookingRepository _bookingRepository;
+
 
         private readonly ILogger _logger;
 
         public RentalService(IRentalRepository rentalRepository, IUserRepository userRepository, IPictureRepository pictureRepository,
-            ILogger<RentalService> logger)
+            IBookingRepository bookingRepository, ILogger<RentalService> logger)
         {
             _rentalRepository = rentalRepository;
             _userRepository = userRepository;
             _pictureRepository = pictureRepository;
+            _bookingRepository = bookingRepository;
             _logger = logger;
         }
 
@@ -42,6 +45,24 @@ namespace DotNest.Services
             List<Rental> rentals = _rentalRepository.GetByUser(user.Id);
 
             return RentalMapper.MapToModel(rentals);
+        }
+
+
+        public List<RentalItemListModel> GetAllRentalItemsOf(string username)
+        {
+            // get user
+            User user = _userRepository.GetByUsername(username)!; // the user is connected, it must exist
+
+
+            List<Rental> rentals = _rentalRepository.GetByUser(user.Id);
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            foreach (Rental rental in rentals)
+            {
+                rental.Bookings = rental.Bookings.Where(booking => booking.FromDate >= today || (booking.FromDate < today && booking.ToDate > today)) // those that have started or will in the future
+                    .OrderBy(booking => booking.FromDate).ToList();
+            }
+            
+            return RentalMapper.MapToItemListModel(rentals);
         }
 
         /// <summary>
@@ -135,5 +156,6 @@ namespace DotNest.Services
             rental.Id = (int)model.Id!;
             _rentalRepository.Update(rental);
         }
+
     }
 }
