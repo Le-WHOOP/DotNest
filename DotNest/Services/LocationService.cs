@@ -58,7 +58,7 @@ namespace DotNest.Services
             // - The ones that are already booked on the date where the user checks the page
             List<Rental> rentals = allRentals
                 .Where(r =>
-                    r.Bookings.Any(b =>
+                    !r.Bookings.Any(b =>
                         b.UserId != user.Id &&
                         (
                             (b.FromDate.CompareTo(from) >= 0 && b.FromDate.CompareTo(to) <= 0) ||
