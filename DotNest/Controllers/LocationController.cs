@@ -30,17 +30,17 @@ namespace DotNest.Controllers
         }
 
         // List of all the rentals available
-        public IActionResult Index(DateTime? fromDate, DateTime? toDate)
+        public IActionResult Index(DateTime? fromDate, DateTime? toDate, string? city)
         {
             string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
             List<RentalModel> rentals = [];
 
             if (username == null)
             {
-                rentals = _locationService.GetAvailableRentals(fromDate, toDate);
+                rentals = _locationService.GetAvailableRentals(fromDate, toDate, city);
             } else
             {
-                rentals = _locationService.GetAllAvailableRentalsAndUserBooking(username!, fromDate, toDate);
+                rentals = _locationService.GetAllAvailableRentalsAndUserBooking(username!, fromDate, toDate, city);
             }
 
              return View(rentals);

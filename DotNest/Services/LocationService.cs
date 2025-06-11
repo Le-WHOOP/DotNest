@@ -12,59 +12,86 @@ namespace DotNest.Services
         private readonly IUserRepository _userRepository;
         private readonly IBookingRepository _bookingRepository;
 
-        public LocationService(IRentalRepository rentalRepository, IUserRepository userRepository, IBookingRepository bookingRepository)
+        public LocationService(
+            IRentalRepository rentalRepository,
+            IUserRepository userRepository,
+            IBookingRepository bookingRepository
+            )
         {
             _rentalRepository = rentalRepository;
             _userRepository = userRepository;
             _bookingRepository = bookingRepository;
         }
 
-        public List<RentalModel> GetAvailableRentals(DateTime? fromDate, DateTime? toDate)
+        public List<RentalModel> GetAvailableRentals(DateTime? fromDate, DateTime? toDate, string? city)
         {
             List<Rental> rentals = _rentalRepository.Get();
-            List<Booking> bookings = _bookingRepository.GetAll();
 
-            DateOnly from = fromDate.HasValue ? DateOnly.FromDateTime(fromDate.Value) : DateOnly.FromDateTime(DateTime.Today);
-            DateOnly to = toDate.HasValue ? DateOnly.FromDateTime(toDate.Value) : DateOnly.MaxValue;
+            DateOnly from = fromDate.HasValue ? DateOnly.FromDateTime(fromDate.Value) : DateOnly.MinValue;
+            DateOnly to = toDate.HasValue ? DateOnly.FromDateTime(toDate.Value) : from;
 
-            var bookedRentalIds = bookings
-                .Where(b => b.FromDate < to && b.ToDate > from)
-                .Select(b => b.RentalId)
-                .ToHashSet();
+            if (!string.IsNullOrEmpty(city))
+            {
+                rentals = rentals.Where(r => r.City.ToLower().Equals(city.ToLower())).ToList();
+            }
 
-            var availableRentals = rentals
-                .Where(r => !bookedRentalIds.Contains(r.Id))
+            if (from == DateOnly.MinValue)
+            {
+                return RentalMapper.MapToModel(rentals);
+            }
+
+            List<Rental> rentalsFiltered = rentals
+                .Where(r =>
+                    !r.Bookings.Any(b =>
+                        (b.FromDate.CompareTo(from) >= 0 && b.ToDate.CompareTo(to) <= 0) ||
+                        (b.ToDate.CompareTo(from) >= 0 && b.ToDate.CompareTo(to) <= 0) ||
+                        (b.FromDate.CompareTo(from) <= 0 && b.ToDate.CompareTo(to) >= 0)
+                    )
+                )
                 .ToList();
 
-            return RentalMapper.MapToModel(availableRentals);
+            return RentalMapper.MapToModel(rentalsFiltered);
         }
 
 
 
-        public List<RentalModel> GetAllAvailableRentalsAndUserBooking(string username, DateTime? fromDate, DateTime? toDate)
+        public List<RentalModel> GetAllAvailableRentalsAndUserBooking(
+            string username,
+            DateTime? fromDate,
+            DateTime? toDate,
+            string? city
+            )
         {
             User user = _userRepository.GetByUsername(username)!;
 
             // Get the From date of the filter. If there is nothing, it is the date of today.
-            DateOnly from = fromDate.HasValue ? DateOnly.FromDateTime(fromDate.Value) : DateOnly.FromDateTime(DateTime.Today);
-            // Get the To date of the filter. If there is nothing, then it is the max value a DateOnly can have.
-            DateOnly to = toDate.HasValue ? DateOnly.FromDateTime(toDate.Value) : DateOnly.MaxValue;
+            DateOnly from = fromDate.HasValue ? DateOnly.FromDateTime(fromDate.Value) : DateOnly.MinValue;
+            // Get the To date of the filter. If there is nothing, then it is the same as the start.
+            DateOnly to = toDate.HasValue ? DateOnly.FromDateTime(toDate.Value) : from;
 
-            // Get all the rentals
+            // Get all the rentals that are not the users
             List<Rental> allRentals = _rentalRepository.Get().Where(r => r.UserId != user.Id).ToList();
 
+            // Filters with the given city
+            if (!string.IsNullOrEmpty(city))
+            {
+                allRentals = allRentals.Where(r => r.City.ToLower().Equals(city.ToLower())).ToList();
+            }
+
+            // No starting date = we return all the rentals
+            if (from == DateOnly.MinValue)
+            {
+                return RentalMapper.MapToModel(allRentals);
+            }
+
             // Here is the logic. We want the all the rentals except:
-            // - The ones that where made by the user (he's the owner of the rentals)
-            // - The ones that are already booked on the date where the user checks the page
+            // - The ones that are already booked on the date when the user checks the page
             List<Rental> rentals = allRentals
                 .Where(r =>
                     !r.Bookings.Any(b =>
-                        b.UserId != user.Id &&
-                        (
-                            (b.FromDate.CompareTo(from) >= 0 && b.FromDate.CompareTo(to) <= 0) ||
-                            (b.ToDate.CompareTo(from) >= 0 && b.ToDate.CompareTo(to) <= 0) ||
-                            (b.FromDate.CompareTo(from) <= 0 && b.ToDate.CompareTo(to) >= 0)
-                        )
+                        (b.FromDate.CompareTo(from) >= 0 && b.ToDate.CompareTo(to) <= 0) ||
+                        (b.ToDate.CompareTo(from) >= 0 && b.ToDate.CompareTo(to) <= 0) ||
+                        (b.FromDate.CompareTo(from) <= 0 && b.ToDate.CompareTo(to) >= 0)
                     )
                 )   
                 .ToList();
