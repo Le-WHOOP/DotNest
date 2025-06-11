@@ -19,7 +19,8 @@
             <p class="card-text">@Model.Description</p>
 
             <h6 class="card-subtitle mb-2 text-body-secondary">Disponibilities</h6>
-            <p class="card-text">Not implemented yet</p>
+            <div id="calendar"></div>
+            <br />
 
             @if (!isLoggedIn)
             {
@@ -33,8 +34,27 @@
             }
             else
             {
-                <button class="btn btn-secondary" disabled>Not implemented yet</button>
+                @Html.ActionLink("Book now", "Book", "Booking", new { id = Model.Id }, new { @class = "btn btn-success" })
             }
         </div>
     </div>
 </div>
+
+<!-- With the help of ChatGpt and https://themesbrand.com/velzon/docs/mvc/flatpickr.html -->
+<!-- Flatpickr CSS -->
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var unavailableDates = @Html.Raw(Json.Serialize(ViewData["UnavailableDates"]));
+
+        flatpickr("#calendar", {
+            inline: true,
+            minDate: "today",
+            disable: unavailableDates,
+            locale: "en"
+        });
+    });
+</script>

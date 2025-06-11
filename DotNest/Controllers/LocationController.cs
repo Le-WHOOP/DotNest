@@ -1,5 +1,7 @@
 ﻿using DotNest.Models;
+using DotNest.Services;
 using DotNest.Services.Interfaces;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -11,31 +13,34 @@ namespace DotNest.Controllers
         private readonly ILocationService _locationService;
         private readonly IRentalService _rentalService;
         private readonly IUserService _userService;
+        private readonly IBookingService _bookingService;
 
         public LocationController(
             IHttpContextAccessor contextAccessor,
             ILocationService locationService,
             IRentalService rentalService,
-            IUserService userService)
+            IUserService userService,
+            IBookingService bookingService)
         {
             _contextAccessor = contextAccessor;
             _locationService = locationService;
             _rentalService = rentalService;
             _userService = userService;
+            _bookingService = bookingService;
         }
 
         // List of all the rentals available
-        public IActionResult Index()
+        public IActionResult Index(DateTime? fromDate, DateTime? toDate)
         {
             string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
             List<RentalModel> rentals = [];
 
             if (username == null)
             {
-                rentals = _locationService.GetAvailableRentals();
+                rentals = _locationService.GetAvailableRentals(fromDate, toDate);
             } else
             {
-                rentals = _locationService.GetAllAvailableRentalsAndUserBooking(username!);
+                rentals = _locationService.GetAllAvailableRentalsAndUserBooking(username!, fromDate, toDate);
             }
 
              return View(rentals);
@@ -58,10 +63,20 @@ namespace DotNest.Controllers
 
             int userId = _userService.GetIdFromUsername(username);
 
-            bool isOwner = userId != -1;
+            bool isOwner = model.UserId == userId;
 
             ViewData["IsOwner"] = isOwner;
             ViewData["IsLoggedIn"] = isLoggedIn;
+
+            var bookings = _bookingService.GetBookingsByRentalId(id);
+
+            var unavailableDates = bookings
+                .SelectMany(b =>
+                    Enumerable.Range(0, (b.ToDate.DayNumber - b.FromDate.DayNumber + 1))
+                              .Select(offset => b.FromDate.AddDays(offset).ToDateTime(TimeOnly.MinValue).ToString("yyyy-MM-dd"))
+                ).ToList();
+
+            ViewData["UnavailableDates"] = unavailableDates;
 
             return View(model);
         }
