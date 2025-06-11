@@ -31,7 +31,7 @@ namespace DotNest.Controllers
             if (username is null)
                 RedirectToAction("User", "Login");
 
-            List<RentalModel> rentals = _rentalService.GetAllRentalsOf(username!);
+            List<RentalItemListModel> rentals = _rentalService.GetAllRentalItemsOf(username!);
 
             return View(rentals);
         }

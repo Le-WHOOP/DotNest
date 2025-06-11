@@ -25,25 +25,20 @@ public partial class DotNestContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=DotNest;Trust Server Certificate=True;Trusted_Connection=True");
+        => optionsBuilder.UseSqlServer("Initial Catalog=DotNest;Data Source=.\\SQLEXPRESS; Trusted_Connection=True; Trust Server Certificate = True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Booking>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.FromDate)
-                .HasColumnType("datetime")
-                .HasColumnName("fromDate");
+            entity.Property(e => e.FromDate).HasColumnName("fromDate");
             entity.Property(e => e.RentalId).HasColumnName("rentalId");
-            entity.Property(e => e.ToDate)
-                .HasColumnType("datetime")
-                .HasColumnName("toDate");
+            entity.Property(e => e.ToDate).HasColumnName("toDate");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
             entity.HasOne(d => d.Rental).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.RentalId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Bookings_Rentals");
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
@@ -80,11 +75,11 @@ public partial class DotNestContext : DbContext
 
             entity.HasOne(d => d.Picture).WithMany(p => p.Rentals)
                 .HasForeignKey(d => d.PictureId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Rentals_Pictures");
 
             entity.HasOne(d => d.User).WithMany(p => p.Rentals)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Rentals_Users");
         });
 

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<DotNest.Models.RentalModel>
+﻿@using DotNest.Models
+@model IEnumerable<DotNest.Models.RentalItemListModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +8,7 @@
 <h1>Your properties</h1>
 <br />
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add a new property</a>
+    <a asp-action="Create" class="btn btn-primary">Ajouter un bien</a>
 </p>
 <br />
 
@@ -22,14 +23,39 @@
                             <p class="card-title">@item.Name</p>
                             <p class="card-text">@item.City</p>
                             <br />
-                            @Html.ActionLink("Edit", "Update", new { id = item.Id }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Modifier", "Update", new { id = item.Id }, new { @class = "btn btn-info" })
 
                         </div>
                     </div>
                     <p class="card-text">@item.Description</p>
-                    <button class="accordion">Reservations</button>
+
+                    <button class="accordion">Réservations</button>
                     <div class="panel">
-                       <p>TODO DISPLAY BOOKINGS</p>
+                        @if (item.FutureBookings.Count == 0)
+                        {
+                            <p>Aucune réservation pour l'instant</p>
+                        }
+                        else
+                        {
+                            <table class="table table-striped" style="flex:100%">
+                            <thead>
+                                <th>Utilisateur</th>
+                                <th>Période</th>
+                            </thead>
+                            <tbody>
+                                @foreach (BookingItemListModel booking in item.FutureBookings)
+                                {
+                                    <tr>
+                                        <td>@booking.UserName</td>
+                                        <td>@booking.FromDate - @booking.ToDate</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        }
+                        
+                        
+                       
                     </div>
                 </div>
             </div>

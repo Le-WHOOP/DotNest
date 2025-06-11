@@ -3,6 +3,7 @@ using DotNest.DataAccess.Interfaces;
 using DotNest.DataAccess.Repositories;
 using DotNest.Services;
 using DotNest.Services.Interfaces;
+using DotNest.Services.Mapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public static class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+        builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
 
         builder.Services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -32,11 +34,13 @@ public static class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IRentalRepository, RentalRepository>();
         builder.Services.AddScoped<IPictureRepository, PictureRepository>();
+        builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
         // services
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IRentalService, RentalService>();
         builder.Services.AddScoped<ILocationService, LocationService>();
+        builder.Services.AddScoped<IBookingService, BookingService>();
 
 
         WebApplication app = builder.Build();

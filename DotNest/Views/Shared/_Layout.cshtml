@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DotNest.HMI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/datepicker/css/bootstrap-datepicker.min.css" />
 </head>
 <body>
     <header>
@@ -50,4 +51,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<script src="~/lib/momentjs/moment.min.js"></script>
+<script src="~/lib/momentjs/locale/de-CH.js"></script>
+<script src="~/lib/datepicker/js/tempusdominus-bootstrap-4.min.js"></script>
 </html>
