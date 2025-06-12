@@ -38,7 +38,7 @@ namespace DotNest.Controllers
 
             if (username == null)
             {
-                rentals = _locationService.GetAvailableRentals(fromDate, toDate, city);
+                rentals = _locationService.GetAllAvailableRentals(fromDate, toDate, city);
             } else
             {
                 rentals = _locationService.GetAllAvailableRentalsAndUserBooking(username!, fromDate, toDate, city);
