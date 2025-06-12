@@ -1,4 +1,5 @@
-﻿using DotNest.Models;
+﻿using DotNest.DataAccess.Entities;
+using DotNest.Models;
 using DotNest.Services;
 using DotNest.Services.Interfaces;
 using Humanizer;
@@ -48,11 +49,11 @@ namespace DotNest.Controllers
 
         public IActionResult Detail(int id)
         {
-            RentalModel? model = _rentalService.Get(id);
+            RentalModel? rental = _rentalService.Get(id);
 
-            if (model is null)
+            if (rental is null)
             {
-                return NotFound();
+                return RedirectToAction("Index", "StatusCode", StatusCodes.Status404NotFound);
             }
 
             // Gives to the View two booleans to determine the value/redirection of the book button:
@@ -63,22 +64,18 @@ namespace DotNest.Controllers
 
             int userId = _userService.GetIdFromUsername(username);
 
-            bool isOwner = model.UserId == userId;
+            bool isOwner = rental.UserId == userId;
 
             ViewData["IsOwner"] = isOwner;
             ViewData["IsLoggedIn"] = isLoggedIn;
 
-            var bookings = _bookingService.GetBookingsByRentalId(id);
+            List<Booking> bookings = _bookingService.GetBookingsByRentalId(id);
 
-            var unavailableDates = bookings
-                .SelectMany(b =>
-                    Enumerable.Range(0, (b.ToDate.DayNumber - b.FromDate.DayNumber + 1))
-                              .Select(offset => b.FromDate.AddDays(offset).ToDateTime(TimeOnly.MinValue).ToString("yyyy-MM-dd"))
-                ).ToList();
+            List<string> unavailableDates = _locationService.GetUnavailableDates(bookings);
 
             ViewData["UnavailableDates"] = unavailableDates;
 
-            return View(model);
+            return View(rental);
         }
     }
 }
