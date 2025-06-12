@@ -1,0 +1,27 @@
+﻿@model IEnumerable<DotNest.Models.BookingModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Vos réservations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom du bien</th>
+            <th>Dates</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.RentalName</td>
+            <td>@item.FromDate - @item.ToDate</td>
+                <td>@Html.ActionLink("Supprimer", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })</td>
+        </tr>
+         
+}
+    </tbody>
+</table>

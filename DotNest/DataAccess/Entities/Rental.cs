@@ -11,6 +11,12 @@ public partial class Rental
 
     public int UserId { get; set; }
 
+    public string Name { get; set; } = null!;
+
+    public string Description { get; set; } = null!;
+
+    public string City { get; set; } = null!;
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual Picture? Picture { get; set; }

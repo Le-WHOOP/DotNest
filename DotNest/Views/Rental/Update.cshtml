@@ -1,0 +1,72 @@
+﻿@model DotNest.Models.RentalModel
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+<h1>Modifier un bien</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" class="form-control" hidden value="@Model.Id" />
+            </div>
+            <div class="form-group">
+                <input asp-for="UserId" class="form-control" hidden value="@Model.UserId" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" value="@Model.Name"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" value="@Model.Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" value="@Model.City"/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="PictureId" class="form-control" hidden value="@Model.PictureId" />
+                <span asp-validation-for="PictureId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="PictureContent" class="form-control" hidden value="@Model.PictureContent" />
+                <span asp-validation-for="PictureContent" class="text-danger"></span>
+            </div>
+            <br />
+            <img id="imagePreview" style="max-width: 450px; max-height: 300px" src="data:image/png;base64,@Model.PictureContent" />
+            <br />
+            <div class="form-group">
+                <label for="Picture">Ou changez l'image</label>
+                <input name="Picture" id="Picture" class="form-control" type="file" accept="image/*">
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retour à la liste</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    Picture.onchange = evt => {
+          const [file] = Picture.files
+          if (file) {
+                imagePreview.src = URL.createObjectURL(file)
+          }
+        }
+</script>

@@ -7,10 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dbo\**" />
+    <Content Remove="Dbo\**" />
+    <EmbeddedResource Remove="Dbo\**" />
+    <None Remove="Dbo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DataAccess\Entities\" />
-    <Folder Include="DataAccess\Repositories\" />
-    <Folder Include="Dbo\" />
-    <Folder Include="Services\Mapper\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +23,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
 
   </ItemGroup>
 

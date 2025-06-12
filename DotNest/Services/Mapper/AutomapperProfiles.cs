@@ -7,7 +7,7 @@ namespace DotNest.Services.Mapper
     {
         public AutomapperProfiles()
         {
-            CreateMap<RegisterModel, User>();
+            CreateMap<BookingModel, Booking>().ReverseMap();
         }
     }
 }
