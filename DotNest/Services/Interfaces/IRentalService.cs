@@ -4,7 +4,7 @@ namespace DotNest.Services.Interfaces
 {
     public interface IRentalService
     {
-        RentalModel? Get(int id);
+        RentalModel? GetRental(int id);
         public List<RentalModel> GetAllRentalsOf(string username);
         public void CreateRental(string username, RentalModel rental);
         public void UpdateRental(RentalModel rental);

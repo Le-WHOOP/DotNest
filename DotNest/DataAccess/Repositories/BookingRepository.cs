@@ -17,9 +17,9 @@ namespace DotNest.DataAccess.Repositories
             return _dbContext.Bookings.FirstOrDefault(booking => booking.Id == id);
         }
 
-        public List<Booking> GetBookingsByUser(int userId)
+        public List<Booking> GetByUser(int userId)
         {
-            return _dbContext.Bookings.Where(booking => booking.UserId == userId)/*.OrderBy(booking => booking.FromDate)*/.ToList();
+            return _dbContext.Bookings.Where(booking => booking.UserId == userId).OrderBy(booking => booking.FromDate).ToList();
         }
 
         public void Create(Booking booking)
@@ -34,7 +34,7 @@ namespace DotNest.DataAccess.Repositories
             _dbContext.SaveChanges();
         }
 
-        public List<Booking> GetBookingsIncluding(DateOnly from, DateOnly to)
+        public List<Booking> GetWithOverlappingDates(DateOnly from, DateOnly to)
         {
             return _dbContext.Bookings.Where(booking => 
                 (booking.ToDate > from && booking.ToDate < to) // the booking ends between "from" and "to"

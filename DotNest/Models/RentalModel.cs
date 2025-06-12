@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace DotNest.Models
 {
@@ -9,7 +10,7 @@ namespace DotNest.Models
         public int UserId { get; set; }
 
 
-        [Length(10, 100)]
+        [Length(10, 100), DisplayName("Nom")]
         public string Name { get; set; }
 
         [Length(20, 2000)]
@@ -17,7 +18,7 @@ namespace DotNest.Models
 
         /*[RegularExpression("((\\p{L})+[- ]?)*")] but it does not work with ModelState.IsValid because it becomes a javascript regex
          and javascript cannot handle \p{L}*/
-        [Length(2, 100)] 
+        [Length(2, 100), DisplayName("Ville")] 
         public string City { get; set; }
 
 

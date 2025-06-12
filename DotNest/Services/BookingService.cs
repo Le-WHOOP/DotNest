@@ -20,18 +20,18 @@ namespace DotNest.Services
             _mapper = mapper;
         }
 
-        public void BookRental(string username, BookingModel model)
+        public void BookRental(string username, BookingModel bookingModel)
         {
             User user = _userRepository.GetByUsername(username)!;
 
             // check that the dates are correct
-            if (model.FromDate > model.ToDate)
+            if (bookingModel.FromDate > bookingModel.ToDate)
                 throw new Exception("Le début de la réservation doit être avant le jour de fin");
 
-            if (model.FromDate < DateOnly.FromDateTime(DateTime.Now))
+            if (bookingModel.FromDate < DateOnly.FromDateTime(DateTime.Now))
                 throw new Exception("Le début de la réservation ne peut pas être dans le passé");
 
-            List<Booking> conflictingBookings = _bookingRepository.GetBookingsIncluding(model.FromDate, model.ToDate);
+            List<Booking> conflictingBookings = _bookingRepository.GetWithOverlappingDates(bookingModel.FromDate, bookingModel.ToDate);
             if (conflictingBookings.Count != 0)
             {
                 List<DateOnly[]> periods = MergeOverlappingPeriods(conflictingBookings.Select(booking => new Tuple<DateOnly, DateOnly>(booking.FromDate, booking.ToDate)).ToList());
@@ -52,7 +52,7 @@ namespace DotNest.Services
                 throw new Exception(message);
             }
 
-            Booking booking = _mapper.Map<Booking>(model);
+            Booking booking = _mapper.Map<Booking>(bookingModel);
             booking.UserId = user.Id;
 
             _bookingRepository.Create(booking);
@@ -62,23 +62,22 @@ namespace DotNest.Services
         {
             periods.Sort((period1, period2) => period1.Item1.CompareTo(period2.Item1));
 
-            List<DateOnly[]> res = new List<DateOnly[]>();
-            res.Add([periods[0].Item1, periods[0].Item2]);
+            List<DateOnly[]> overlappingPeriods = new List<DateOnly[]>();
+            overlappingPeriods.Add([periods[0].Item1, periods[0].Item2]);
 
             for (int i = 1; i < periods.Count; i++)
             {
-                DateOnly[] last = res[res.Count - 1];
-                DateOnly[] curr = [periods[i].Item1, periods[i].Item2];
+                DateOnly[] lastMergedInterval = overlappingPeriods[overlappingPeriods.Count - 1];
+                DateOnly[] currentPeriodInterval = [periods[i].Item1, periods[i].Item2];
 
-                // If current interval overlaps with the last merged
-                // interval, merge them 
-                if (curr[0] <= last[1])
-                    last[1] = last[1] > curr[1] ? last[1] : curr[1]; // get max
+                // If current interval overlaps with the last merged interval, merge them 
+                if (currentPeriodInterval[0] <= lastMergedInterval[1])
+                    lastMergedInterval[1] = lastMergedInterval[1] > currentPeriodInterval[1] ? lastMergedInterval[1] : currentPeriodInterval[1]; // get max end date
                 else
-                    res.Add([curr[0], curr[1]]);
+                    overlappingPeriods.Add([currentPeriodInterval[0], currentPeriodInterval[1]]);
             }
 
-            return res;
+            return overlappingPeriods;
         }
 
         public void DeleteBooking(int id)
@@ -91,7 +90,7 @@ namespace DotNest.Services
         {
             User user = _userRepository.GetByUsername(username)!;
 
-            return _mapper.Map<List<BookingModel>>(_bookingRepository.GetBookingsByUser(user.Id));
+            return _mapper.Map<List<BookingModel>>(_bookingRepository.GetByUser(user.Id));
         }
     }
 }
