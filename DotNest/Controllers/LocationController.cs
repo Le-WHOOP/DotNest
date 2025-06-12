@@ -49,7 +49,7 @@ namespace DotNest.Controllers
 
         public IActionResult Detail(int id)
         {
-            RentalModel? rental = _rentalService.Get(id);
+            RentalModel? rental = _rentalService.GetRental(id);
 
             if (rental is null)
             {
