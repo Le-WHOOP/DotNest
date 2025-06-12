@@ -24,13 +24,6 @@ namespace DotNest.Services
         {
             User user = _userRepository.GetByUsername(username)!;
 
-            // check that the dates are correct
-            if (bookingModel.FromDate > bookingModel.ToDate)
-                throw new Exception("Le début de la réservation doit être avant le jour de fin");
-
-            if (bookingModel.FromDate < DateOnly.FromDateTime(DateTime.Now))
-                throw new Exception("Le début de la réservation ne peut pas être dans le passé");
-
             List<Booking> conflictingBookings = _bookingRepository.GetWithOverlappingDates(bookingModel.FromDate, bookingModel.ToDate);
             if (conflictingBookings.Count != 0)
             {

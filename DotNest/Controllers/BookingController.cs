@@ -10,14 +10,20 @@ namespace DotNest.Controllers
     {
         private readonly IBookingService _bookingService;
         private readonly IRentalService _rentalService;
+        private readonly ILocationService _locationService;
         private readonly IHttpContextAccessor _contextAccessor;
 
 
-        public BookingController(IBookingService bookingService, IRentalService rentalService, IHttpContextAccessor contextAccessor)
+        public BookingController(
+            IBookingService bookingService,
+            IRentalService rentalService,
+            IHttpContextAccessor contextAccessor,
+            ILocationService locationService)
         {
             _bookingService = bookingService;
             _rentalService = rentalService;
             _contextAccessor = contextAccessor;
+            _locationService = locationService;
         }
 
         public IActionResult Index()
@@ -54,7 +60,14 @@ namespace DotNest.Controllers
                 return RedirectToAction("StatusCode", "Index", StatusCodes.Status404NotFound);
             }
 
+            // Get the list of bookings of the rental
+            List<Booking> bookings = _bookingService.GetBookingsByRentalId(id);
+
+            List<string> unavailableDates = _locationService.GetUnavailableDates(bookings);
+
+            ViewData["UnavailableDates"] = unavailableDates;
             ViewData["rentalName"] = rental.Name;
+
             return View();
         }
 
@@ -71,6 +84,13 @@ namespace DotNest.Controllers
 
             ViewData["rentalId"] = booking.RentalId;
             ViewData["rentalName"] = booking.RentalName;
+
+            // Get the list of bookings of the rental
+            List<Booking> bookings = _bookingService.GetBookingsByRentalId(booking.RentalId);
+
+            List<string> unavailableDates = _locationService.GetUnavailableDates(bookings);
+
+            ViewData["UnavailableDates"] = unavailableDates;
 
 
             try

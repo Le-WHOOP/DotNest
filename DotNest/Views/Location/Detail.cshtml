@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
     bool isOwner = ViewData["IsOwner"] as bool? ?? false;
     bool isLoggedIn = ViewData["IsLoggedIn"] as bool? ?? false;
 }
@@ -12,29 +12,29 @@
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
 
-            <h6 class="card-subtitle mb-2 text-body-secondary">City</h6>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Ville</h6>
             <p class="card-text">@Model.City</p>
 
             <h6 class="card-subtitle mb-2 text-body-secondary">Description</h6>
             <p class="card-text">@Model.Description</p>
 
-            <h6 class="card-subtitle mb-2 text-body-secondary">Disponibilities</h6>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Disponibilités</h6>
             <div id="calendar"></div>
             <br />
 
             @if (!isLoggedIn)
             {
                 <form asp-controller="User" asp-action="Login" method="get">
-                    <button type="submit" class="btn btn-primary">Log in to book</button>
+                    <button type="submit" class="btn btn-primary">Connectes-toi pour réserver</button>
                 </form>
             }
             else if (isOwner)
             {
-                <button class="btn btn-secondary" disabled>This rental is yours</button>
+                <button class="btn btn-secondary" disabled>Cette location est la tienne</button>
             }
             else
             {
-                @Html.ActionLink("Book now", "Book", "Booking", new { id = Model.Id }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Réserver", "Book", "Booking", new { id = Model.Id }, new { @class = "btn btn-success" })
             }
         </div>
     </div>
@@ -45,6 +45,8 @@
 <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
 <!-- Flatpickr JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- French file -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -54,7 +56,7 @@
             inline: true,
             minDate: "today",
             disable: unavailableDates,
-            locale: "en"
+            locale: "fr"
         });
     });
 </script>
