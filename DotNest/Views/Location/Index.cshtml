@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+    var today = DateTime.Today.ToString("yyyy-MM-dd");
+    var fromDate = ViewContext.HttpContext.Request.Query["fromDate"].ToString();
+    var toDate = ViewContext.HttpContext.Request.Query["toDate"].ToString();
+    var city = ViewContext.HttpContext.Request.Query["city"].ToString();
+}
+
+<h1>All available rentals</h1>
+<form method="get" asp-controller="Location" asp-action="Index" class="mb-3 d-flex gap-2 align-items-end">
+    <div class="form-group">
+        <label for="fromDate">From</label>
+        <input type="date" class="form-control" id="fromDate" name="fromDate" min="@today" value="@fromDate" />
+    </div>
+    <div class="form-group">
+        <label for="toDate">To</label>
+        <input type="date" class="form-control" id="toDate" name="toDate" min="@today" value="@toDate" />
+    </div>
+    <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" class="form-control" id="city" name="city" value="@city" />
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<div class="rows">
+    @foreach (var item in Model)
+    {
+        <div class="col-6">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <img src="data:image/png;base64,@item.PictureContent" style="max-width:400px; max-height: 200px" />
+                        <div class="mx-3">
+                            <p class="card-title">@item.Name</p>
+                            <p class="card-text">@item.City</p>
+                            <br/>
+                            @Html.ActionLink("Details", "Detail", new { id = item.Id }, new { @class = "btn btn-info" })
+                        </div>
+                    </div>
+                    <p class="card-text">@item.Description</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

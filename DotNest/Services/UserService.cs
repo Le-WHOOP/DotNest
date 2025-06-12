@@ -1,7 +1,9 @@
 ﻿using DotNest.DataAccess.Entities;
 using DotNest.DataAccess.Interfaces;
+using DotNest.DataAccess.Repositories;
 using DotNest.Models;
 using DotNest.Services.Interfaces;
+using DotNest.Services.Mapper;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -16,6 +18,19 @@ namespace DotNest.Services
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public int GetIdFromUsername(string? username)
+        {
+            if (username == null)
+                return -1;
+
+            User? user = _userRepository.GetByUsername(username);
+
+            if (user == null)
+                return -1;
+
+            return user.Id;
         }
 
         /// <summary>

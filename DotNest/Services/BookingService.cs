@@ -86,6 +86,14 @@ namespace DotNest.Services
             _bookingRepository.Delete(booking);
         }
 
+        public List<Booking> GetBookingsByRentalId(int rentalId)
+        {
+            return _bookingRepository.GetAll()
+                .Where(b => b.RentalId == rentalId)
+                .ToList();
+        }
+
+
         public List<BookingModel> GetAllBookingsFromUser(string username)
         {
             User user = _userRepository.GetByUsername(username)!;

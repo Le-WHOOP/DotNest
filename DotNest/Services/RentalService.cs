@@ -36,6 +36,7 @@ namespace DotNest.Services
 
             return RentalMapper.MapToModel(rental!);
         }
+
         public List<RentalModel> GetAllRentalsOf(string username)
         {
             // get user

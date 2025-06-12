@@ -39,6 +39,7 @@ public static class Program
         // services
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IRentalService, RentalService>();
+        builder.Services.AddScoped<ILocationService, LocationService>();
         builder.Services.AddScoped<IBookingService, BookingService>();
 
 

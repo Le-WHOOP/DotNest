@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Details";
+    bool isOwner = ViewData["IsOwner"] as bool? ?? false;
+    bool isLoggedIn = ViewData["IsLoggedIn"] as bool? ?? false;
+}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card text-center border-secondary" style="max-width: 400px;">
+        <img src="data:image/png;base64,@Model.PictureContent" class="card-img-top" style="max-width:400px; max-height: 200px" />
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+
+            <h6 class="card-subtitle mb-2 text-body-secondary">City</h6>
+            <p class="card-text">@Model.City</p>
+
+            <h6 class="card-subtitle mb-2 text-body-secondary">Description</h6>
+            <p class="card-text">@Model.Description</p>
+
+            <h6 class="card-subtitle mb-2 text-body-secondary">Disponibilities</h6>
+            <div id="calendar"></div>
+            <br />
+
+            @if (!isLoggedIn)
+            {
+                <form asp-controller="User" asp-action="Login" method="get">
+                    <button type="submit" class="btn btn-primary">Log in to book</button>
+                </form>
+            }
+            else if (isOwner)
+            {
+                <button class="btn btn-secondary" disabled>This rental is yours</button>
+            }
+            else
+            {
+                @Html.ActionLink("Book now", "Book", "Booking", new { id = Model.Id }, new { @class = "btn btn-success" })
+            }
+        </div>
+    </div>
+</div>
+
+<!-- With the help of ChatGpt and https://themesbrand.com/velzon/docs/mvc/flatpickr.html -->
+<!-- Flatpickr CSS -->
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var unavailableDates = @Html.Raw(Json.Serialize(ViewData["UnavailableDates"]));
+
+        flatpickr("#calendar", {
+            inline: true,
+            minDate: "today",
+            disable: unavailableDates,
+            locale: "en"
+        });
+    });
+</script>

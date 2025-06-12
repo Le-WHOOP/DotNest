@@ -17,6 +17,11 @@ namespace DotNest.DataAccess.Repositories
             return _dbContext.Bookings.FirstOrDefault(booking => booking.Id == id);
         }
 
+        public List<Booking> GetAll()
+        {
+            return _dbContext.Bookings.ToList();
+        }
+
         public List<Booking> GetByUser(int userId)
         {
             return _dbContext.Bookings.Where(booking => booking.UserId == userId).OrderBy(booking => booking.FromDate).ToList();

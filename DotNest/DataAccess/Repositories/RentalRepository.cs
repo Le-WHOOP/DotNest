@@ -23,7 +23,6 @@ namespace DotNest.DataAccess.Repositories
             return _dbContext.Rentals.FirstOrDefault(rental => rental.Id == id);
         }
 
-
         public List<Rental> GetByUser(int userId)
         {
             return _dbContext.Rentals.Where(rental => rental.UserId == userId).ToList();
