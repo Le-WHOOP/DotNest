@@ -23,7 +23,7 @@ namespace DotNest.Controllers
         [Authorize]
         public ActionResult Index()
         { 
-            return View();
+            return RedirectToAction("Index", "Location");
         }
 
 
