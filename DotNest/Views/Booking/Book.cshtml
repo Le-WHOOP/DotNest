@@ -48,5 +48,37 @@
 <link href="" />
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const unavailableDates = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewData["UnavailableDates"]));
+
+            const fromInput = document.querySelector("#FromDate");
+            const toInput = document.querySelector("#ToDate");
+
+            const fromDatePicker = flatpickr(fromInput, {
+                dateFormat: "Y-m-d",
+                disable: unavailableDates,
+                minDate: "today",
+                onChange: function (selectedDates, dateStr) {
+                    toDatePicker.set("minDate", dateStr);
+                },
+                locale: "en"
+            });
+
+            const toDatePicker = flatpickr(toInput, {
+                dateFormat: "Y-m-d",
+                disable: unavailableDates,
+                minDate: "today",
+                onChange: function (selectedDates, dateStr) {
+                    fromDatePicker.set("maxDate", dateStr);
+                },
+                locale: "en"
+            });
+        });
+    </script>
 }
 
