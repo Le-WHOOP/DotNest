@@ -57,7 +57,6 @@ namespace DotNest.Services.Mapper
                     FromDate = booking.FromDate,
                     ToDate = booking.ToDate
                 }).ToList()
-                //FutureBookings = new()
             }
             ;
         }

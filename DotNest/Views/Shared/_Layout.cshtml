@@ -32,6 +32,18 @@
                         </li>
                     </ul>
                 </div>
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <form asp-controller="User" asp-action="Logout" method="post" class="d-flex">
+                        <button type="submit" class="btn btn-outline-danger">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-controller="User" asp-action="Login" method="get" class="d-flex">
+                        <button type="submit" class="btn btn-outline-primary">Login</button>
+                    </form>
+                }
             </div>
         </nav>
     </header>

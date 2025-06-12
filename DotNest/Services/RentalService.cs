@@ -27,7 +27,7 @@ namespace DotNest.Services
         }
 
 
-        public RentalModel? Get(int id)
+        public RentalModel? GetRental(int id)
         {
             Rental? rental = _rentalRepository.Get(id);
 
@@ -78,7 +78,7 @@ namespace DotNest.Services
             //handle image
             if (model.Picture != null)
             {
-                var imageArray = GetFileByteAray(model.Picture);
+                var imageArray = GetFileByteArray(model.Picture);
                 if (imageArray != null)
                 {
                     // To simplify things - we always add image
@@ -111,7 +111,7 @@ namespace DotNest.Services
             }
         }
 
-        private static byte[] GetFileByteAray(IFormFile formFile)
+        private static byte[] GetFileByteArray(IFormFile formFile)
         {
             if (formFile != null)
             {
@@ -134,16 +134,16 @@ namespace DotNest.Services
         }
 
 
-        public void CreateRental(string username, RentalModel model)
+        public void CreateRental(string username, RentalModel rentalModel)
         {
             User user = _userRepository.GetByUsername(username)!; // the user is connected, it must exist
-            model.UserId = user.Id;
+            rentalModel.UserId = user.Id;
 
             // add picture
-            int pictureId = HandlePicture(model, true);
+            int pictureId = HandlePicture(rentalModel, true);
 
             // create rental
-            Rental rental = RentalMapper.MapToEntity(model, pictureId);
+            Rental rental = RentalMapper.MapToEntity(rentalModel, pictureId);
             _rentalRepository.Create(rental);
         }
 

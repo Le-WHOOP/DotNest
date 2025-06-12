@@ -24,7 +24,7 @@ namespace DotNest.Controllers
         {
             string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
             if (username is null)
-                RedirectToAction("User", "Login");
+                return RedirectToAction("Login", "User");
 
             List<BookingModel> bookings = _bookingService.GetAllBookingsFromUser(username!);
             return View(bookings);
@@ -32,14 +32,22 @@ namespace DotNest.Controllers
 
         public IActionResult Delete(int id)
         {
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
+
             _bookingService.DeleteBooking(id);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Book(int id)
         {
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
+
             ViewData["rentalId"] = id;
-            RentalModel? rental = _rentalService.Get(id);
+            RentalModel? rental = _rentalService.GetRental(id);
 
             if (rental is null)
             {
@@ -51,32 +59,29 @@ namespace DotNest.Controllers
         }
 
         [HttpPost]
-        public IActionResult Book(BookingModel model)
+        public IActionResult Book(BookingModel booking)
         {
-            model.Id = null; // since it has the rental id as path param and that it must be named id, it assigns it to this attributs, which has the same name
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
+
+            booking.Id = null; // The path param id corresponding to the rental id is wrongly assigned as the booking id, so we reset booking.Id
             if (!ModelState.IsValid)
                 return View();
 
-            ViewData["rentalId"] = model.RentalId;
-            ViewData["rentalName"] = model.RentalName;
+            ViewData["rentalId"] = booking.RentalId;
+            ViewData["rentalName"] = booking.RentalName;
 
-
-            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
-
-            if (username == null)
-            {
-                return RedirectToAction("User", "Login");
-            }
 
             try
             {
-                _bookingService.BookRental(username, model);
+                _bookingService.BookRental(username, booking);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("FromDate", ex.Message); // show an error message under the "from" field
-                return View(model); // show the view with the submitted info
+                return View(booking); // show the view with the submitted info
             }
         }
     }

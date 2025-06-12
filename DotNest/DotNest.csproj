@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dbo\**" />
+    <Content Remove="Dbo\**" />
+    <EmbeddedResource Remove="Dbo\**" />
+    <None Remove="Dbo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DataAccess\Entities\" />
-    <Folder Include="Dbo\" />
   </ItemGroup>
 
   <ItemGroup>

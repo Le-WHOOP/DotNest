@@ -14,7 +14,7 @@ namespace DotNest.Controllers
 
         private readonly IRentalService _rentalService;
 
-        private static readonly Regex CITY_REGEX = new Regex("((\\p{L})+[- ]?)+");
+        private static readonly Regex CITY_REGEX = new Regex("((\\p{L})+[- ]?)+"); // accepts blocks of letters separated by a - or space 
 
         public RentalController(IHttpContextAccessor contextAccessor, IRentalService userService)
         {
@@ -29,7 +29,7 @@ namespace DotNest.Controllers
         {
             string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
             if (username is null)
-                RedirectToAction("User", "Login");
+                return RedirectToAction("Login", "User");
 
             List<RentalItemListModel> rentals = _rentalService.GetAllRentalItemsOf(username!);
 
@@ -38,6 +38,10 @@ namespace DotNest.Controllers
 
         public IActionResult Create()
         {
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
+
             return View();
         }
 
@@ -59,10 +63,12 @@ namespace DotNest.Controllers
                 return View(rental);
             }
 
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
+
             try
             {
-                string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
-
                 _rentalService.CreateRental(username, rental);
 
                 return RedirectToAction(nameof(Index));
@@ -76,17 +82,25 @@ namespace DotNest.Controllers
 
         public IActionResult Update(int id)
         {
-            RentalModel? model = _rentalService.Get(id);
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
 
-            if (model is null)
-                return NotFound();
+            RentalModel? rental = _rentalService.GetRental(id);
 
-            return View(model);
+            if (rental is null)
+                return RedirectToAction("Index", "StatusCode", StatusCodes.Status404NotFound);
+
+            return View(rental);
         }
 
         [HttpPost]
         public IActionResult Update(int id, RentalModel rental)
         {
+            string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
+            if (username is null)
+                return RedirectToAction("Login", "User");
+
             if (!ModelState.IsValid)
                 return View(rental);
 
@@ -98,7 +112,6 @@ namespace DotNest.Controllers
 
             try
             {
-                string? username = _contextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)?.Value;
                 rental.Id = id;
                 _rentalService.UpdateRental(rental);
 
