@@ -68,7 +68,7 @@ public static class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=User}/{action=Login}/{id?}")
+            pattern: "{controller=Location}/{action=Index}")
             .WithStaticAssets();
        
 

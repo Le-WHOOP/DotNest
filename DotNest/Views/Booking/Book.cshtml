@@ -51,6 +51,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- French file -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -66,7 +68,7 @@
                 onChange: function (selectedDates, dateStr) {
                     toDatePicker.set("minDate", dateStr);
                 },
-                locale: "en"
+                locale: "fr"
             });
 
             const toDatePicker = flatpickr(toInput, {
@@ -76,7 +78,7 @@
                 onChange: function (selectedDates, dateStr) {
                     fromDatePicker.set("maxDate", dateStr);
                 },
-                locale: "en"
+                locale: "fr"
             });
         });
     </script>
