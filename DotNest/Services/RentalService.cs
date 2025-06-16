@@ -104,7 +104,7 @@ namespace DotNest.Services
             }
             else // no picture was uploaded
             {
-                return(int)model.PictureId!;
+                return (int)model.PictureId!;
             }
         }
 

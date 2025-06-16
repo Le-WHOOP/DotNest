@@ -4,15 +4,12 @@ using AutoMapper;
 using DotNest.DataAccess.Entities;
 using DotNest.DataAccess.Interfaces;
 using DotNest.DataAccess.Repositories;
-using DotNest.Models;
 using DotNest.Services.Mapper;
 
 using Microsoft.EntityFrameworkCore;
 
 using Moq;
 using Moq.EntityFrameworkCore;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DotTest
 {
@@ -25,10 +22,10 @@ namespace DotTest
         public User[] UsersData { get; private set; }
 
         // Repositories
-        public IBookingRepository BookingRepository { get; private set; }
-        public IPictureRepository PictureRepository { get; private set; }
-        public IRentalRepository RentalRepository { get; private set; }
-        public IUserRepository UserRepository { get; private set; }
+        public BookingRepository BookingRepository { get; private set; }
+        public PictureRepository PictureRepository { get; private set; }
+        public RentalRepository RentalRepository { get; private set; }
+        public UserRepository UserRepository { get; private set; }
 
         public MockData()
         {
@@ -49,6 +46,7 @@ namespace DotTest
                 Id = 1,
                 Username = "user1",
                 Email = "user1@gmail.com",
+                // user1-password
                 HashedPassword = "xWq7vWEA7lQMX5K9RZh4Vj6kd0ZRiW+ivE2uPEug0jg=",
                 PasswordSalt = "//Wnob5zMWEzC9dS4Y2eLw==",
             };
@@ -57,7 +55,8 @@ namespace DotTest
                 Id = 2,
                 Username = "user2",
                 Email = "user2@gmail.com",
-                HashedPassword = "STt+4+8poxrefOEcG/2aSIZjbzuOvUSCvdJB6uPVpmM=",
+                // user2-password
+                HashedPassword = "FTO9il61cy62M0wJWW0fH13nOxI7KKFx2vd2HZzlcyk=",
                 PasswordSalt = "KSW/Egf5b14sjOlPkZQLsA==",
             };
             User user3 = new()
@@ -65,7 +64,8 @@ namespace DotTest
                 Id = 3,
                 Username = "user3",
                 Email = "user3@gmail.com",
-                HashedPassword = "EhQv6ysfNvLRCIDUs6SG3efpPwb0ymHYALojh4hLO9k=",
+                // user3-password
+                HashedPassword = "PCFh3clie0FlvSExlMFp+mnF1t9hfEXFekRdhcmsh50=",
                 PasswordSalt = "o5exm461ZOiNaM6P0kV3eQ==",
             };
 
@@ -156,7 +156,7 @@ namespace DotTest
                 UserId = 2,
                 RentalId = 1,
                 FromDate = new DateOnly(2025, 7, 1),
-                ToDate = new DateOnly(2025, 7, 10),
+                ToDate = new DateOnly(2025, 7, 9),
                 Rental = rental1A,
                 User = user2,
             };
