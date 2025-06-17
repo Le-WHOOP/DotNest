@@ -5,32 +5,29 @@ namespace DotTest;
 
 public class RentalRepositoryTest
 {
-    private RentalRepository _rentalRepository;
-    private Rental[] _rentalsData;
+    private readonly RentalRepository _rentalRepository;
+    private readonly List<Rental> _rentalData;
 
-    // Used to reset the data at each test
-    private void InitTest()
+    public RentalRepositoryTest()
     {
         var mockData = new MockData();
         _rentalRepository = mockData.RentalRepository;
-        _rentalsData = mockData.RentalsData;
+        _rentalData = mockData.RentalData;
     }
 
     [Fact]
     public void Get_NoId()
     {
-        InitTest();
-
         List<Rental> actualRentals = _rentalRepository.Get();
 
         Assert.Multiple(() =>
         {
-            Assert.Equal(_rentalsData.Length, actualRentals.Count);
+            Assert.Equal(_rentalData.Count, actualRentals.Count);
 
             List<Rental> orderedRentals = actualRentals.OrderBy(r => r.Id).ToList();
             for (int index = 0; index < orderedRentals.Count; index++)
             {
-                Assert.Equal(_rentalsData[index].Id, orderedRentals[index].Id);
+                Assert.Equal(_rentalData[index].Id, orderedRentals[index].Id);
             }
         });
     }
@@ -38,10 +35,8 @@ public class RentalRepositoryTest
     [Fact]
     public void Get_ValidId()
     {
-        InitTest();
-
         int id = 1;
-        Rental expectedRental = _rentalsData[0];
+        Rental expectedRental = _rentalData[0];
         Rental? actualRental = _rentalRepository.Get(id);
 
         Assert.Multiple(() =>
@@ -77,8 +72,6 @@ public class RentalRepositoryTest
     [Fact]
     public void Get_InvalidId()
     {
-        InitTest();
-
         int id = -1;
         Rental? actualRental = _rentalRepository.Get(id);
 
@@ -88,11 +81,9 @@ public class RentalRepositoryTest
     [Fact]
     public void GetByUser_ValidUserId()
     {
-        InitTest();
-
         int userId = 1;
 
-        List<Rental> expectedRentals = _rentalsData.Where(r => r.UserId == userId).OrderBy(r => r.Id).ToList();
+        List<Rental> expectedRentals = _rentalData.Where(r => r.UserId == userId).OrderBy(r => r.Id).ToList();
         List<Rental> actualRentals = _rentalRepository.GetByUser(userId);
 
         Assert.Multiple(() =>
@@ -110,8 +101,6 @@ public class RentalRepositoryTest
     [Fact]
     public void GetByUser_InvalidUserId()
     {
-        InitTest();
-
         int userId = -1;
 
         List<Rental> actualRentals = _rentalRepository.GetByUser(userId);

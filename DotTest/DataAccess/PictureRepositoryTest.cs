@@ -5,24 +5,21 @@ namespace DotTest;
 
 public class PictureRepositoryTest
 {
-    private PictureRepository _pictureRepository;
-    private Picture[] _picturesData;
+    private readonly PictureRepository _pictureRepository;
+    private readonly List<Picture> _pictureData;
 
-    // Used to reset the data at each test
-    private void InitTest()
+    public PictureRepositoryTest()
     {
         var mockData = new MockData();
         _pictureRepository = mockData.PictureRepository;
-        _picturesData = mockData.PicturesData;
+        _pictureData = mockData.PictureData;
     }
 
     [Fact]
     public void Get_ValidId()
     {
-        InitTest();
-
         int id = 1;
-        Picture expectedPicture = _picturesData[0];
+        Picture expectedPicture = _pictureData[0];
         Picture? actualPicture = _pictureRepository.Get(id);
 
         Assert.Multiple(() =>
@@ -48,8 +45,6 @@ public class PictureRepositoryTest
     [Fact]
     public void Get_InvalidId()
     {
-        InitTest();
-
         int id = -1;
         Picture? actualPicture = _pictureRepository.Get(id);
 

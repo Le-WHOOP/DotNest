@@ -5,24 +5,21 @@ namespace DotTest;
 
 public class UserRepositoryTest
 {
-    private UserRepository _userRepository;
-    private User[] _usersData;
+    private readonly UserRepository _userRepository;
+    private readonly List<User> _userData;
 
-    // Used to reset the data at each test
-    private void InitTest()
+    public UserRepositoryTest()
     {
         var mockData = new MockData();
         _userRepository = mockData.UserRepository;
-        _usersData = mockData.UsersData;
+        _userData = mockData.UserData;
     }
 
     [Fact]
     public void GetByEmail_ValidEmail()
     {
-        InitTest();
-
         string email = "user1@gmail.com";
-        User expectedUser = _usersData[0];
+        User expectedUser = _userData[0];
         User? actualUser = _userRepository.GetByEmail(email);
 
         Assert.Multiple(() =>
@@ -60,8 +57,6 @@ public class UserRepositoryTest
     [Fact]
     public void GetByEmail_InvalidEmail()
     {
-        InitTest();
-
         string email = "invalid@gmail.com";
         User? actualUser = _userRepository.GetByEmail(email);
 
@@ -71,10 +66,8 @@ public class UserRepositoryTest
     [Fact]
     public void GetByUsername_ValidUsername()
     {
-        InitTest();
-
         string username = "user1";
-        User expectedUser = _usersData[0];
+        User expectedUser = _userData[0];
         User? actualUser = _userRepository.GetByUsername(username);
 
         Assert.Multiple(() =>
@@ -112,8 +105,6 @@ public class UserRepositoryTest
     [Fact]
     public void GetByUsername_InvalidUsername()
     {
-        InitTest();
-
         string username = "invalid";
         User? actualUser = _userRepository.GetByUsername(username);
 

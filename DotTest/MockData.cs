@@ -4,6 +4,7 @@ using AutoMapper;
 using DotNest.DataAccess.Entities;
 using DotNest.DataAccess.Interfaces;
 using DotNest.DataAccess.Repositories;
+using DotNest.Models;
 using DotNest.Services.Mapper;
 
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,16 @@ namespace DotTest
 {
     internal class MockData
     {
-        // Data
-        public Booking[] BookingsData { get; private set; }
-        public Picture[] PicturesData { get; private set; }
-        public Rental[] RentalsData { get; private set; }
-        public User[] UsersData { get; private set; }
+        // Entity Data
+        public List<Booking> BookingData { get; private set; } = [];
+        public List<Picture> PictureData { get; private set; } = [];
+        public List<Rental> RentalData { get; private set; } = [];
+        public List<User> UserData { get; private set; } = [];
+
+        // Model Data
+        public List<BookingModel> BookingModelData { get; private set; } = [];
+        public List<RentalModel> RentalModelData { get; private set; } = [];
+        public List<RentalItemListModel> RentalItemData { get; private set; } = [];
 
         // Repositories
         public BookingRepository BookingRepository { get; private set; }
@@ -31,14 +37,15 @@ namespace DotTest
         {
             Mapper mapper = new(new MapperConfiguration(config => config.AddProfile<AutomapperProfiles>()));
 
-            InitData();
+            InitEntityData();
+            InitModelData();
 
             Mock<DotNestContext> mockContext = InitMockContext(mapper);
 
             InitRepositories(mockContext);
         }
 
-        private void InitData()
+        private void InitEntityData()
         {
             // Users, without Bookings nor Rentals
             User user1 = new ()
@@ -155,8 +162,8 @@ namespace DotTest
                 Id = 1,
                 UserId = 2,
                 RentalId = 1,
-                FromDate = new DateOnly(2025, 7, 1),
-                ToDate = new DateOnly(2025, 7, 9),
+                FromDate = new DateOnly(2023, 7, 1),
+                ToDate = new DateOnly(2023, 7, 9),
                 Rental = rental1A,
                 User = user2,
             };
@@ -165,35 +172,45 @@ namespace DotTest
                 Id = 2,
                 UserId = 2,
                 RentalId = 1,
-                FromDate = new DateOnly(2025, 7, 11),
-                ToDate = new DateOnly(2025, 7, 20),
+                FromDate = new DateOnly(2026, 7, 1),
+                ToDate = new DateOnly(2026, 7, 9),
+                Rental = rental1A,
+                User = user2,
+            };
+            Booking booking3OfRental1AByUser2 = new()
+            {
+                Id = 3,
+                UserId = 2,
+                RentalId = 1,
+                FromDate = new DateOnly(2026, 7, 11),
+                ToDate = new DateOnly(2026, 7, 20),
                 Rental = rental1A,
                 User = user2,
             };
             Booking bookingOfRental1AByUser3 = new()
             {
-                Id = 3,
+                Id = 4,
                 UserId = 3,
                 RentalId = 1,
-                FromDate = new DateOnly(2025, 7, 25),
-                ToDate = new DateOnly(2025, 7, 30),
+                FromDate = new DateOnly(2026, 7, 25),
+                ToDate = new DateOnly(2026, 7, 30),
                 Rental = rental1A,
                 User = user3,
             };
             Booking bookingOfRental2AByUser3 = new()
             {
-                Id = 4,
+                Id = 5,
                 UserId = 3,
                 RentalId = 3,
-                FromDate = new DateOnly(2025, 7, 13),
-                ToDate = new DateOnly(2025, 7, 24),
+                FromDate = new DateOnly(2026, 7, 13),
+                ToDate = new DateOnly(2026, 7, 24),
                 Rental = rental2A,
                 User = user3,
             };
 
             // Set Bookings and Rentals for each User
             user1.Rentals = [rental1A, rental1B];
-            user2.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2];
+            user2.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2];
             user2.Rentals = [rental2A];
             user3.Bookings = [bookingOfRental1AByUser3, bookingOfRental2AByUser3];
 
@@ -203,17 +220,80 @@ namespace DotTest
             picture2A.Rentals =[rental2A];
 
             // Set Bookings for each Rental
-            rental1A.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, bookingOfRental1AByUser3];
+            rental1A.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2, bookingOfRental1AByUser3];
             rental1B.Bookings = [bookingOfRental2AByUser3];
 
             // Initialise properties
-            BookingsData = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, bookingOfRental1AByUser3, bookingOfRental2AByUser3];
-            PicturesData = [picture1A, picture1B, picture2A];
-            RentalsData = [rental1A, rental1B, rental2A];
-            UsersData = [user1, user2, user3];
+            BookingData = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2, bookingOfRental1AByUser3, bookingOfRental2AByUser3];
+            PictureData = [picture1A, picture1B, picture2A];
+            RentalData = [rental1A, rental1B, rental2A];
+            UserData = [user1, user2, user3];
         }
 
-        private Mock<DbSet<Entity>> InitMockSet<Entity>(Entity[] data)
+        private void InitModelData()
+        {
+            foreach (Booking booking in BookingData)
+            {
+                BookingModel bookingModel = new()
+                {
+                    Id = booking.Id,
+                    RentalName = booking.Rental.Name,
+                    RentalId = booking.Id,
+                    FromDate = booking.FromDate,
+                    ToDate = booking.ToDate,
+                };
+
+                BookingModelData.Add(bookingModel);
+            }
+
+            foreach (Rental rental in RentalData)
+            {
+                RentalModel rentalModel = new()
+                {
+                    Id = rental.Id,
+                    UserId = rental.UserId,
+                    Name = rental.Name,
+                    Description = rental.Description,
+                    City = rental.City,
+                    PictureId = rental.PictureId,
+                    PictureContent = rental.Picture!.Base64,
+                };
+
+                RentalModelData.Add(rentalModel);
+            }
+
+            foreach (Rental rental in RentalData)
+            {
+                List<BookingItemListModel> futureBookings = new();
+                
+                foreach (Booking booking in rental.Bookings.Where(b => b.FromDate.Year != 2023))
+                {
+                    BookingItemListModel bookingItemListModel = new()
+                    {
+                        UserName = booking.User.Username,
+                        FromDate = booking.FromDate,
+                        ToDate = booking.ToDate,
+                    };
+
+                    futureBookings.Add(bookingItemListModel);
+                }
+
+                RentalItemListModel rentalItemListModel = new()
+                {
+                    Id = rental.Id,
+                    UserId = rental.UserId,
+                    Name = rental.Name,
+                    Description = rental.Description,
+                    City = rental.City,
+                    PictureContent = rental.Picture!.Base64,
+                    FutureBookings = futureBookings,
+                };
+
+                RentalItemData.Add(rentalItemListModel);
+            }
+        }
+
+        private Mock<DbSet<Entity>> InitMockSet<Entity>(List<Entity> data)
     where Entity : class, new()
         {
             IQueryable<Entity> queryableData = data.AsQueryable();
@@ -230,26 +310,26 @@ namespace DotTest
         private Mock<DotNestContext> InitMockContext(Mapper mapper)
         {
             // Init mock sets
-            Mock<DbSet<Booking>> mockBookingsSet = InitMockSet(BookingsData);
-            Mock<DbSet<Picture>> mockPicturesSet = InitMockSet(PicturesData);
-            Mock<DbSet<Rental>> mockRentalsSet = InitMockSet(RentalsData);
-            Mock<DbSet<User>> mockUsersSet = InitMockSet(UsersData);
+            Mock<DbSet<Booking>> mockBookingSet = InitMockSet(BookingData);
+            Mock<DbSet<Picture>> mockPictureSet = InitMockSet(PictureData);
+            Mock<DbSet<Rental>> mockRentalSet = InitMockSet(RentalData);
+            Mock<DbSet<User>> mockUserSet = InitMockSet(UserData);
 
             Mock<DotNestContext> mockContext = new();
 
             // Link mock sets to mock context
             // Bookings
-            mockContext.Setup(c => c.Bookings).ReturnsDbSet(mockBookingsSet.Object);
-            mockContext.Setup(c => c.Set<Booking>()).ReturnsDbSet(mockBookingsSet.Object);
+            mockContext.Setup(c => c.Bookings).ReturnsDbSet(mockBookingSet.Object);
+            mockContext.Setup(c => c.Set<Booking>()).ReturnsDbSet(mockBookingSet.Object);
             // Pictures
-            mockContext.Setup(c => c.Pictures).ReturnsDbSet(mockPicturesSet.Object);
-            mockContext.Setup(c => c.Set<Picture>()).ReturnsDbSet(mockPicturesSet.Object);
+            mockContext.Setup(c => c.Pictures).ReturnsDbSet(mockPictureSet.Object);
+            mockContext.Setup(c => c.Set<Picture>()).ReturnsDbSet(mockPictureSet.Object);
             // Rentals
-            mockContext.Setup(c => c.Rentals).ReturnsDbSet(mockRentalsSet.Object);
-            mockContext.Setup(c => c.Set<Rental>()).ReturnsDbSet(mockRentalsSet.Object);
+            mockContext.Setup(c => c.Rentals).ReturnsDbSet(mockRentalSet.Object);
+            mockContext.Setup(c => c.Set<Rental>()).ReturnsDbSet(mockRentalSet.Object);
             // Users
-            mockContext.Setup(c => c.Users).ReturnsDbSet(mockUsersSet.Object);
-            mockContext.Setup(c => c.Set<User>()).ReturnsDbSet(mockUsersSet.Object);
+            mockContext.Setup(c => c.Users).ReturnsDbSet(mockUserSet.Object);
+            mockContext.Setup(c => c.Set<User>()).ReturnsDbSet(mockUserSet.Object);
 
             return mockContext;
         }
