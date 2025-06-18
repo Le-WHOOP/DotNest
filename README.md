@@ -73,7 +73,7 @@ git clone git@github.com:Le-WHOOP/DotNest.git
 
 ## Connexion en remote
 
-Pour se connecter en [remote](vingtdeux.hd.free.fr/dotnest), suivre le lien.
+Pour se connecter en [remote](http://vingtdeux.hd.free.fr/dotnest), suivre le lien.
 
 ## Connexion en local
 
@@ -84,18 +84,18 @@ Puis, dans le terminal:
 # Lancer docker depuis la source du projet
 make
 ```
-Puis cliquer sur [ce lien](localhost:8080/).
+Puis cliquer sur [ce lien](http://localhost:8080/).
 
 ## Tests
 
-Pour lancer les tests, allez dans `Tests > Executer tous les tests` ou `Ctrl R + A`
+Pour lancer les tests, allez dans `Tests > Executer tous les tests` ou `Ctrl R + A`.
 
 > [!NOTE] 
 > Pour cause de difficultées, les tests visant à tester directement la DB n'ont pas été fait. Cela inclut des tests pour des fonctions comme `Add`, `Update`et `Delete`. 
 
 ## License
 
-None
+Aucun
 
 ---
 
