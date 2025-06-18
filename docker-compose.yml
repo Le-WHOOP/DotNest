@@ -21,7 +21,7 @@ services:
     depends_on:
       - dotnest-sqlserver
     environment:
-      ConnectionStrings__SqlServer: Data Source=sqlserver,1433;Database=master;User Id=sa;Password=Yourpassword123;TrustServerCertificate=True;
+      ConnectionStrings__SqlServer: Data Source=dotnest-sqlserver,1433;Database=master;User Id=sa;Password=Yourpassword123;TrustServerCertificate=True;
     networks:
       - dotnest
       - dotnest-database
