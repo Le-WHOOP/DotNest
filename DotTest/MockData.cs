@@ -75,6 +75,15 @@ namespace DotTest
                 HashedPassword = "PCFh3clie0FlvSExlMFp+mnF1t9hfEXFekRdhcmsh50=",
                 PasswordSalt = "o5exm461ZOiNaM6P0kV3eQ==",
             };
+            User user4 = new()
+            {
+                Id = 4,
+                Username = "user4",
+                Email = "user4@gmail.com",
+                // user4-password
+                HashedPassword = "fHyQkhOegIwJTg3wJWLTNa0qD2pspcPHrfMyIkr79W0=",
+                PasswordSalt = "DXtNYepaoD0bORfLSln58Q==",
+            };
 
             // Pictures, without Rentals
             Picture picture1A = new()
@@ -140,7 +149,7 @@ namespace DotTest
                 UserId = 1,
                 Name = "Location 1B",
                 Description = "Immeuble rénové récemment",
-                City = "Paris",
+                City = "Le Kremlin-Bicetre",
                 Picture = picture1B,
                 User = user1,
             };
@@ -151,7 +160,7 @@ namespace DotTest
                 UserId = 2,
                 Name = "Location 2A",
                 Description = "Parfait pour travailler",
-                City = "Le Kremlin-Bicetre",
+                City = "Paris",
                 Picture = picture2A,
                 User = user2,
             };
@@ -187,9 +196,19 @@ namespace DotTest
                 Rental = rental1A,
                 User = user2,
             };
-            Booking bookingOfRental1AByUser3 = new()
+            Booking booking1OfRental1AByUser3 = new()
             {
                 Id = 4,
+                UserId = 3,
+                RentalId = 1,
+                FromDate = new DateOnly(2023, 7, 6),
+                ToDate = new DateOnly(2023, 7, 12),
+                Rental = rental1A,
+                User = user3,
+            };
+            Booking booking2OfRental1AByUser3 = new()
+            {
+                Id = 5,
                 UserId = 3,
                 RentalId = 1,
                 FromDate = new DateOnly(2026, 7, 25),
@@ -199,7 +218,7 @@ namespace DotTest
             };
             Booking bookingOfRental2AByUser3 = new()
             {
-                Id = 5,
+                Id = 6,
                 UserId = 3,
                 RentalId = 3,
                 FromDate = new DateOnly(2026, 7, 13),
@@ -212,7 +231,7 @@ namespace DotTest
             user1.Rentals = [rental1A, rental1B];
             user2.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2];
             user2.Rentals = [rental2A];
-            user3.Bookings = [bookingOfRental1AByUser3, bookingOfRental2AByUser3];
+            user3.Bookings = [booking1OfRental1AByUser3, booking2OfRental1AByUser3, bookingOfRental2AByUser3];
 
             // Set Rentals for each Picture
             picture1A.Rentals = [rental1A];
@@ -220,14 +239,14 @@ namespace DotTest
             picture2A.Rentals =[rental2A];
 
             // Set Bookings for each Rental
-            rental1A.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2, bookingOfRental1AByUser3];
-            rental1B.Bookings = [bookingOfRental2AByUser3];
+            rental1A.Bookings = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2, booking1OfRental1AByUser3, booking2OfRental1AByUser3];
+            rental2A.Bookings = [bookingOfRental2AByUser3];
 
             // Initialise properties
-            BookingData = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2, bookingOfRental1AByUser3, bookingOfRental2AByUser3];
+            BookingData = [booking1OfRental1AByUser2, booking2OfRental1AByUser2, booking3OfRental1AByUser2, booking1OfRental1AByUser3, booking2OfRental1AByUser3, bookingOfRental2AByUser3];
             PictureData = [picture1A, picture1B, picture2A];
             RentalData = [rental1A, rental1B, rental2A];
-            UserData = [user1, user2, user3];
+            UserData = [user1, user2, user3, user4];
         }
 
         private void InitModelData()

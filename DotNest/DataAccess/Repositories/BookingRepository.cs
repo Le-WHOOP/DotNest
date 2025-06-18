@@ -39,12 +39,14 @@ namespace DotNest.DataAccess.Repositories
             _dbContext.SaveChanges();
         }
 
-        public List<Booking> GetWithOverlappingDates(DateOnly from, DateOnly to)
+        public List<Booking> GetWithOverlappingDates(int rentalId, DateOnly from, DateOnly to)
         {
-            return _dbContext.Bookings.Where(booking => 
+            return _dbContext.Bookings.Where(booking => booking.RentalId == rentalId
+            && (
                 (booking.ToDate >= from && booking.ToDate <= to) // the booking ends between "from" and "to"
                 || (booking.FromDate >= from && booking.FromDate <= to) // the booking starts between "from" and "to"
                 || (booking.FromDate <= from && booking.ToDate >= to) // the booking starts before "from" and finishes after "to"
+                )
             ).ToList();
         }
     }

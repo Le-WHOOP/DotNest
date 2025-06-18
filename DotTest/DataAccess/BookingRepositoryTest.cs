@@ -99,10 +99,12 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_EmptyWithDifferentFromAndTo()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 8, 8);
         DateOnly to = new DateOnly(2026, 8, 12);
 
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Empty(actualBookings);
     }
@@ -110,10 +112,12 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_EmptyWithSameFromAndTo()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 7, 10);
         DateOnly to = from;
 
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Empty(actualBookings);
     }
@@ -121,11 +125,13 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_BookingSurroundingOverlap()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 7, 3);
         DateOnly to = new DateOnly(2026, 7, 5);
 
         Booking expectedBooking = _bookingData[1];
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Multiple(() =>
         {
@@ -138,11 +144,13 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_BookingIncludedInOverlap()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 6, 3);
         DateOnly to = new DateOnly(2026, 7, 10);
 
         Booking expectedBooking = _bookingData[1];
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Multiple(() =>
         {
@@ -155,11 +163,13 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_LastDayMatchesFrom()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 7, 30);
         DateOnly to = new DateOnly(2026, 8, 10);
 
-        Booking expectedBooking = _bookingData[3];
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        Booking expectedBooking = _bookingData[4];
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Multiple(() =>
         {
@@ -172,11 +182,13 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_FirstDayMatchesTo()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 6, 19);
         DateOnly to = new DateOnly(2026, 7, 1);
 
         Booking expectedBooking = _bookingData[1];
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Multiple(() =>
         {
@@ -189,11 +201,13 @@ public class BookingRepositoryTest
     [Fact]
     public void GetWithOverlappingDates_SeveralBookingsOverlap()
     {
+        int rentalId = 1;
+
         DateOnly from = new DateOnly(2026, 7, 8);
         DateOnly to = new DateOnly(2026, 7, 14);
 
-        List<Booking> expectedBookings = [_bookingData[1], _bookingData[2], _bookingData[4]];
-        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(from, to);
+        List<Booking> expectedBookings = [_bookingData[1], _bookingData[2]];
+        List<Booking> actualBookings = _bookingRepository.GetWithOverlappingDates(rentalId, from, to);
 
         Assert.Multiple(() =>
         {

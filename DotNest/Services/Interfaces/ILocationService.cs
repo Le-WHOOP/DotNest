@@ -7,6 +7,6 @@ namespace DotNest.Services.Interfaces
     {
         public List<RentalModel> GetAllAvailableRentals(DateTime? fromDate, DateTime? toDate, string? city);
         public List<RentalModel> GetAllAvailableRentalsAndUserBooking(string username, DateTime? fromDate, DateTime? toDate, string? city);
-        public List<string> GetUnavailableDates(List<Booking> bookings);
+        public List<string> GetUnavailableDates(List<BookingModel> bookings);
     }
 }
