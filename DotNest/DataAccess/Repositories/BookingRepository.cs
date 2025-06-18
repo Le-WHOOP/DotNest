@@ -42,8 +42,9 @@ namespace DotNest.DataAccess.Repositories
         public List<Booking> GetWithOverlappingDates(DateOnly from, DateOnly to)
         {
             return _dbContext.Bookings.Where(booking => 
-                (booking.ToDate > from && booking.ToDate < to) // the booking ends between "from" and "to"
-                || (booking.FromDate > from && booking.FromDate < to) // the booking starts between "from" and "to"
+                (booking.ToDate >= from && booking.ToDate <= to) // the booking ends between "from" and "to"
+                || (booking.FromDate >= from && booking.FromDate <= to) // the booking starts between "from" and "to"
+                || (booking.FromDate <= from && booking.ToDate >= to) // the booking starts before "from" and finishes after "to"
             ).ToList();
         }
     }
