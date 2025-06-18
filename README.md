@@ -86,6 +86,9 @@ make
 ```
 Puis cliquer sur [ce lien](http://localhost:8080/).
 
+> [!WARNING]
+> Attention, il faut attendre quelques minutes avant d'aller sur le navigateur. Même si le docker a été lancé, il faut attendre que le server SQL se connecte au projet.
+
 ## Tests
 
 Pour lancer les tests, allez dans `Tests > Executer tous les tests` ou `Ctrl R + A`.
