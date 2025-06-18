@@ -10,7 +10,7 @@ public class RentalRepositoryTest
 
     public RentalRepositoryTest()
     {
-        var mockData = new MockData();
+        MockData mockData = new();
         _rentalRepository = mockData.RentalRepository;
         _rentalData = mockData.RentalData;
     }

@@ -10,7 +10,7 @@ public class UserRepositoryTest
 
     public UserRepositoryTest()
     {
-        var mockData = new MockData();
+        MockData mockData = new();
         _userRepository = mockData.UserRepository;
         _userData = mockData.UserData;
     }

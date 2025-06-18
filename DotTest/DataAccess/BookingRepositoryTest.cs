@@ -10,7 +10,7 @@ public class BookingRepositoryTest
 
     public BookingRepositoryTest()
     {
-        var mockData = new MockData();
+        MockData mockData = new();
         _bookingRepository = mockData.BookingRepository;
         _bookingData = mockData.BookingData;
     }

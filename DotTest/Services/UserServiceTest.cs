@@ -11,7 +11,7 @@ public class UserServiceTest
 
     public UserServiceTest()
     {
-        var mockData = new MockData();
+        MockData mockData = new();
         _userService = new UserService(mockData.UserRepository);
         _userData = mockData.UserData;
     }

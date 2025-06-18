@@ -10,7 +10,7 @@ public class PictureRepositoryTest
 
     public PictureRepositoryTest()
     {
-        var mockData = new MockData();
+        MockData mockData = new();
         _pictureRepository = mockData.PictureRepository;
         _pictureData = mockData.PictureData;
     }
