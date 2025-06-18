@@ -1,0 +1,27 @@
+volumes:
+  dotnest-sqlserver-data:
+
+networks:
+  dotnest:
+  dotnest-database:
+
+services:
+
+  dotnest-nginx:
+    extends:
+      file: docker-compose.yml
+      service: dotnest-nginx
+    ports:
+      - 8080:80
+
+  dotnest:
+    extends:
+      file: docker-compose.yml
+      service: dotnest
+
+  dotnest-sqlserver:
+    extends:
+      file: docker-compose.yml
+      service: dotnest-sqlserver
+    ports:
+      - 1433:1433
