@@ -1,8 +1,8 @@
 volumes:
-  sqlserver-data:
+  dotnest-sqlserver-data:
 
 services:
-  sqlserver:
+  dotnest-sqlserver:
     build:
       context: ./
       dockerfile: Dockerfile
@@ -11,4 +11,4 @@ services:
     environment:
       SA_PASSWORD: "Yourpassword123"
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - dotnest-sqlserver-data:/var/opt/mssql
