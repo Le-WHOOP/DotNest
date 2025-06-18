@@ -14,16 +14,13 @@ namespace DotNest.Services
         private readonly IBookingRepository _bookingRepository;
 
 
-        private readonly ILogger _logger;
-
         public RentalService(IRentalRepository rentalRepository, IUserRepository userRepository, IPictureRepository pictureRepository,
-            IBookingRepository bookingRepository, ILogger<RentalService> logger)
+            IBookingRepository bookingRepository)
         {
             _rentalRepository = rentalRepository;
             _userRepository = userRepository;
             _pictureRepository = pictureRepository;
             _bookingRepository = bookingRepository;
-            _logger = logger;
         }
 
 
@@ -107,7 +104,7 @@ namespace DotNest.Services
             }
             else // no picture was uploaded
             {
-                return(int)model.PictureId!;
+                return (int)model.PictureId!;
             }
         }
 

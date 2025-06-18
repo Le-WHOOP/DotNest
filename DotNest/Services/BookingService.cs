@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+
+using AutoMapper;
 using DotNest.DataAccess.Entities;
 using DotNest.DataAccess.Interfaces;
 using DotNest.Models;
@@ -24,7 +26,7 @@ namespace DotNest.Services
         {
             User user = _userRepository.GetByUsername(username)!;
 
-            List<Booking> conflictingBookings = _bookingRepository.GetWithOverlappingDates(bookingModel.FromDate, bookingModel.ToDate);
+            List<Booking> conflictingBookings = _bookingRepository.GetWithOverlappingDates(bookingModel.RentalId, bookingModel.FromDate, bookingModel.ToDate);
             if (conflictingBookings.Count != 0)
             {
                 List<DateOnly[]> periods = MergeOverlappingPeriods(conflictingBookings.Select(booking => new Tuple<DateOnly, DateOnly>(booking.FromDate, booking.ToDate)).ToList());
@@ -34,12 +36,13 @@ namespace DotNest.Services
                 foreach (DateOnly[] period in periods)
                 {
                     message += $"{period[0].ToShortDateString()} - {period[1].ToShortDateString()}";
-                    if (index <= periods.Count - 1)
+                    if (index < periods.Count - 1)
                         message += ", ";
                     else
                     {
                         message += " ";
                     }
+                    index++;
                 }
                 message += "sont réservées et sont donc en conflit avec votre sélection";
                 throw new Exception(message);
@@ -79,11 +82,11 @@ namespace DotNest.Services
             _bookingRepository.Delete(booking);
         }
 
-        public List<Booking> GetBookingsByRentalId(int rentalId)
+        public List<BookingModel> GetBookingsByRentalId(int rentalId)
         {
-            return _bookingRepository.GetAll()
+            return _mapper.Map<List<BookingModel>> (_bookingRepository.GetAll()
                 .Where(b => b.RentalId == rentalId)
-                .ToList();
+                .ToList());
         }
 
 

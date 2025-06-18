@@ -9,6 +9,6 @@ namespace DotNest.DataAccess.Interfaces
         public List<Booking> GetAll();
         public void Create(Booking booking);
         public void Delete(Booking booking);
-        public List<Booking> GetWithOverlappingDates(DateOnly from, DateOnly to);
+        public List<Booking> GetWithOverlappingDates(int rentalId, DateOnly from, DateOnly to);
     }
 }

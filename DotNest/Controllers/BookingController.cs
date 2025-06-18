@@ -61,7 +61,7 @@ namespace DotNest.Controllers
             }
 
             // Get the list of bookings of the rental
-            List<Booking> bookings = _bookingService.GetBookingsByRentalId(id);
+            List<BookingModel> bookings = _bookingService.GetBookingsByRentalId(id);
 
             List<string> unavailableDates = _locationService.GetUnavailableDates(bookings);
 
@@ -86,7 +86,7 @@ namespace DotNest.Controllers
             ViewData["rentalName"] = booking.RentalName;
 
             // Get the list of bookings of the rental
-            List<Booking> bookings = _bookingService.GetBookingsByRentalId(booking.RentalId);
+            List<BookingModel> bookings = _bookingService.GetBookingsByRentalId(booking.RentalId);
 
             List<string> unavailableDates = _locationService.GetUnavailableDates(bookings);
 

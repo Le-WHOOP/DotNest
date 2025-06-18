@@ -95,11 +95,11 @@ namespace DotNest.Services
                 .ToList();
         }
 
-        public List<string> GetUnavailableDates(List<Booking> bookings)
+        public List<string> GetUnavailableDates(List<BookingModel> bookings)
         {
             // For each booking, generate a list of all dates (inclusive) between FromDate and ToDate.
             // Then flatten the result into a single list of strings formatted as "yyyy-MM-dd".
-            // This is usefd for marking unavailable dates on the calendar (disabling already booked days).
+            // This is used for marking unavailable dates on the calendar (disabling already booked days).
             return bookings
                 .SelectMany(b =>
                     Enumerable.Range(0, (b.ToDate.DayNumber - b.FromDate.DayNumber + 1)) // number of days in booking

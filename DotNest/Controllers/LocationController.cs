@@ -69,7 +69,7 @@ namespace DotNest.Controllers
             ViewData["IsOwner"] = isOwner;
             ViewData["IsLoggedIn"] = isLoggedIn;
 
-            List<Booking> bookings = _bookingService.GetBookingsByRentalId(id);
+            List<BookingModel> bookings = _bookingService.GetBookingsByRentalId(id);
 
             List<string> unavailableDates = _locationService.GetUnavailableDates(bookings);
 
