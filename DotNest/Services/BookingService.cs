@@ -84,7 +84,7 @@ namespace DotNest.Services
 
         public List<BookingModel> GetBookingsByRentalId(int rentalId)
         {
-            return _mapper.Map < List < BookingModel >> (_bookingRepository.GetAll()
+            return _mapper.Map <List<BookingModel>> (_bookingRepository.GetAll()
                 .Where(b => b.RentalId == rentalId)
                 .ToList());
         }
