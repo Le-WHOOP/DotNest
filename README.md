@@ -50,7 +50,7 @@ Les fonctionnalités de ce site sont séparées en fonctionnalités publiques (n
 
 ### Fonctionnalités publiques 
 
-Un utilisateur non-connecté peut regarder la liste des biens proposés sur le site et les filtrer selon des lieux et/ou des dates. Il, il peut également accéder au détail d’un bien, mais ne peut pas le réserver. 
+Un utilisateur non-connecté peut regarder la liste des biens proposés sur le site et les filtrer selon des lieux et/ou des dates. Il peut également accéder au détail d’un bien, mais ne peut pas le réserver. 
 
 Demander à réserver un bien redirige l’utilisateur vers la page de connexion/inscription. Un utilisateur non-connecté peut donc se connecter et s’inscrire sur le site. 
 
@@ -64,7 +64,7 @@ Enfin, l’utilisateur peut se déconnecter du site.
 
 ## Cloner le projet
 
-Pour cloner, aller dans le [projet](https://github.com/Le-WHOOP/DotNest/tree/dev) dans la branche `dev` et dans `Code > Copy url to clipboard` copiez l'url. Puis, dans le terminal:
+Pour cloner, aller dans le [projet](https://github.com/Le-WHOOP/DotNest) dans la branche `main` et dans `Code > Copy url to clipboard` copiez l'url. Puis, dans le terminal:
 
 ```bash
 # Clone le repository
