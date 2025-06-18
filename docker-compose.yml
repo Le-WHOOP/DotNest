@@ -13,8 +13,6 @@ services:
       - ./nginx:/etc/nginx/conf.d:ro
     networks:
       - dotnest
-    ports:
-      - 8080:80
 
   dotnest:
     extends:
@@ -34,5 +32,3 @@ services:
       service: sqlserver
     networks:
       - dotnest-database
-    ports:
-      - 1433:1433
