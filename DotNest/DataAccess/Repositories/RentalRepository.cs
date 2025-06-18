@@ -1,5 +1,6 @@
 ﻿using DotNest.DataAccess.Entities;
 using DotNest.DataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNest.DataAccess.Repositories
 {

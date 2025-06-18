@@ -2,6 +2,13 @@
 
 set -e
 
+sql_files=(
+    "Pictures.sql"
+    "Users.sql"
+    "Rentals.sql"
+    "Bookings.sql"
+)
+
 /opt/mssql/bin/sqlservr &
 
 echo "Waiting for SQL Server to start..."
@@ -13,13 +20,13 @@ if [ $initialized = "1" ]; then
     echo "Skipping initialization"
 else
     echo "Running SQL scripts..."
-    for f in /init/*.sql; do
-    echo "Running $f"
-    /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -i "$f" -C
+    for file in "${sql_files[@]}"; do
+        echo "Running $file"
+        /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -i "init/$file" -C
     done
 fi
 
-echo "📋 Listing tables in the database:"
+echo "Listing tables in the database:"
 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -Q "SELECT name FROM sys.tables;" -C
 
 wait

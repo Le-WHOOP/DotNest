@@ -9,7 +9,6 @@ services:
     expose:
       - "1433"
     environment:
-      SA_PASSWORD: "Your_password123"
+      SA_PASSWORD: "Yourpassword123"
     volumes:
-      - ./Database/dbo/Tables:/sql-init:ro
       - sqlserver-data:/var/opt/mssql
