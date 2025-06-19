@@ -14,11 +14,15 @@ services:
       service: dotnest-nginx
     ports:
       - 8080:80
+    depends_on:
+      - dotnest
 
   dotnest:
     extends:
       file: docker-compose.yml
       service: dotnest
+    depends_on:
+      - dotnest-postgres
 
   dotnest-postgres:
     extends:
