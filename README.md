@@ -73,7 +73,7 @@ git clone git@github.com:Le-WHOOP/DotNest.git
 
 ## Connexion en remote
 
-Pour se connecter en [remote](https://vingtdeux.hd.free.fr/dotnest), suivre le lien.
+Pour se connecter en [remote](http://vingtdeux.hd.free.fr/), suivre le lien.
 
 ## Connexion en local
 
