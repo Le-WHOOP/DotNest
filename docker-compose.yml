@@ -1,5 +1,5 @@
 volumes:
-  sqlserver-data:
+  dotnest-sqlserver-data:
 
 networks:
   dotnest:
@@ -7,7 +7,7 @@ networks:
 
 services:
 
-  nginx:
+  dotnest-nginx:
     image: nginx
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
@@ -19,15 +19,16 @@ services:
       file: DotNest/docker-compose.yml
       service: dotnest
     depends_on:
-      - sqlserver
+      - dotnest-sqlserver
     environment:
-      ConnectionStrings__SqlServer: Server=sqlserver,1433;Database=DotNestDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;
+      ConnectionStrings__SqlServer: Data Source=dotnest-sqlserver,1433;Database=master;User Id=sa;Password=Yourpassword123;TrustServerCertificate=True;
     networks:
+      - dotnest
       - dotnest-database
 
-  sqlserver:
+  dotnest-sqlserver:
     extends:
       file: Database/docker-compose.yml
-      service: sqlserver
+      service: dotnest-sqlserver
     networks:
       - dotnest-database

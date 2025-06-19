@@ -1,10 +1,9 @@
-.PHONY: debug check clean
+.PHONY: restart debug check clean
 
 all:
-	docker compose up --build -d
+	docker compose -f docker-compose.debug.yml up --build -d
 
-debug:
-	echo NOPE
+restart: clean all
 
 check:
 	dotnet test DotTest/DotTest.csproj

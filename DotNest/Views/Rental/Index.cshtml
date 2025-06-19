@@ -1,0 +1,87 @@
+﻿@using DotNest.Models
+@model IEnumerable<DotNest.Models.RentalItemListModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Vos biens</h1>
+<br />
+<p>
+    <a asp-action="Create" class="btn btn-primary">Ajouter un bien</a>
+</p>
+<br />
+
+<div class="row">
+    @foreach (var item in Model) {
+        <div class="col-6">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <img src="data:image/png;base64,@item.PictureContent" style="max-width:400px; max-height: 200px" />
+                        <div class="mx-3">
+                            <p class="card-title">@item.Name</p>
+                            <p class="card-text">@item.City</p>
+                            <br />
+                            @Html.ActionLink("Modifier", "Update", new { id = item.Id }, new { @class = "btn btn-info" })
+
+                        </div>
+                    </div>
+                    <p class="card-text">@item.Description</p>
+
+                    <button class="accordion">Réservations</button>
+                    <div class="panel">
+                        @if (item.FutureBookings.Count == 0)
+                        {
+                            <p>Aucune réservation pour l'instant</p>
+                        }
+                        else
+                        {
+                            <table class="table table-striped" style="flex:100%">
+                            <thead>
+                                <th>Utilisateur</th>
+                                <th>Période</th>
+                            </thead>
+                            <tbody>
+                                @foreach (BookingItemListModel booking in item.FutureBookings)
+                                {
+                                    <tr>
+                                        <td>@booking.UserName</td>
+                                        <td>@booking.FromDate - @booking.ToDate</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        }
+                        
+                        
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+</div>
+
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        /* Toggle between adding and removing the "active" class,
+        to highlight the button that controls the panel */
+        this.classList.toggle("active");
+
+        /* Toggle between hiding and showing the active panel */
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } else {
+          panel.style.display = "block";
+        }
+      });
+    }
+</script>
