@@ -1,5 +1,6 @@
 volumes:
   dotnest-sqlserver-data:
+  dotnest-postgres-data:
 
 networks:
   dotnest:
@@ -19,16 +20,16 @@ services:
       file: DotNest/docker-compose.yml
       service: dotnest
     depends_on:
-      - dotnest-sqlserver
+      - dotnest-postgres
     environment:
-      ConnectionStrings__SqlServer: Data Source=dotnest-sqlserver,1433;Database=master;User Id=sa;Password=Yourpassword123;TrustServerCertificate=True;
+      ConnectionStrings__Postgres: Host=dotnest-postgres;Port=5432;Database=dotnest;Username=dotnest;Password=yourpassword123
     networks:
       - dotnest
       - dotnest-database
 
-  dotnest-sqlserver:
+  dotnest-postgres:
     extends:
       file: Database/docker-compose.yml
-      service: dotnest-sqlserver
+      service: dotnest-postgres
     networks:
       - dotnest-database

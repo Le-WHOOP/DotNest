@@ -25,7 +25,7 @@ public static class Program
 
         builder.Services.AddDbContext<DotNestContext>(options =>
         {
-            options.UseLazyLoadingProxies().UseSqlServer("Name=ConnectionStrings:SqlServer");
+            options.UseLazyLoadingProxies().UseNpgsql("Name=ConnectionStrings:Postgres");
         });
 
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -70,7 +70,7 @@ public static class Program
             name: "default",
             pattern: "{controller=Location}/{action=Index}")
             .WithStaticAssets();
-       
+
 
         app.Run();
     }

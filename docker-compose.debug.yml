@@ -1,5 +1,6 @@
 volumes:
   dotnest-sqlserver-data:
+  dotnest-postgres-data:
 
 networks:
   dotnest:
@@ -19,9 +20,9 @@ services:
       file: docker-compose.yml
       service: dotnest
 
-  dotnest-sqlserver:
+  dotnest-postgres:
     extends:
       file: docker-compose.yml
-      service: dotnest-sqlserver
+      service: dotnest-postgres
     ports:
-      - 1433:1433
+      - 5432:5432
