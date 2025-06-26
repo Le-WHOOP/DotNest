@@ -16,6 +16,7 @@ services:
       - dotnest
     depends_on:
       - dotnest
+    restart: unless-stopped
 
   dotnest:
     extends:
@@ -28,6 +29,7 @@ services:
     networks:
       - dotnest
       - dotnest-database
+    restart: unless-stopped
 
   dotnest-postgres:
     extends:

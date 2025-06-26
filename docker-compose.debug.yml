@@ -13,7 +13,7 @@ services:
       file: docker-compose.yml
       service: dotnest-nginx
     ports:
-      - 8080:80
+      - 80:80
     depends_on:
       - dotnest
 
