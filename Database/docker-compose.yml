@@ -13,10 +13,12 @@ services:
       SA_PASSWORD: "Yourpassword123"
     volumes:
       - dotnest-sqlserver-data:/var/opt/mssql
+    profiles:
+      - "sqlserver"
 
   dotnest-postgres:
     image: postgres:15
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: dotnest
       POSTGRES_PASSWORD: yourpassword123

@@ -1,12 +1,21 @@
-.PHONY: restart debug check clean
+.PHONY: up down pull build config
 
-all:
-	docker compose -f docker-compose.debug.yml up --build -d
+include docker-compose.mk
 
-restart: clean all
+up:
+	docker compose $(DOTNEST_COMPOSE_ARGS) up --build -d --remove-orphans
 
-check:
-	dotnet test DotTest/DotTest.csproj
+down:
+	docker compose $(DOTNEST_COMPOSE_ARGS) down
 
-clean:
-	docker compose down
+debug:
+	docker compose $(DOTNEST_COMPOSE_ARGS) -f docker-compose.debug.yml up --build -d
+
+pull:
+	docker compose $(DOTNEST_COMPOSE_ARGS) pull
+
+build:
+	docker compose $(DOTNEST_COMPOSE_ARGS) build
+
+config:
+	docker compose $(DOTNEST_COMPOSE_ARGS) config

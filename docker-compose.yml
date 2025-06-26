@@ -1,7 +1,3 @@
-volumes:
-  dotnest-sqlserver-data:
-  dotnest-postgres-data:
-
 networks:
   dotnest:
   dotnest-database:
@@ -19,9 +15,6 @@ services:
     restart: unless-stopped
 
   dotnest:
-    extends:
-      file: DotNest/docker-compose.yml
-      service: dotnest
     depends_on:
       - dotnest-postgres
     environment:
@@ -32,8 +25,5 @@ services:
     restart: unless-stopped
 
   dotnest-postgres:
-    extends:
-      file: Database/docker-compose.yml
-      service: dotnest-postgres
     networks:
       - dotnest-database
