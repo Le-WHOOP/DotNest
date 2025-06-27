@@ -1,3 +1,7 @@
+include:
+  - DotNest/docker-compose.yml
+  - Database/docker-compose.yml
+
 networks:
   dotnest:
   dotnest-database:
@@ -6,24 +10,10 @@ services:
 
   dotnest-nginx:
     image: nginx
+    restart: unless-stopped
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
     networks:
       - dotnest
     depends_on:
       - dotnest
-    restart: unless-stopped
-
-  dotnest:
-    depends_on:
-      - dotnest-postgres
-    environment:
-      ConnectionStrings__Postgres: Host=dotnest-postgres;Port=5432;Database=dotnest;Username=dotnest;Password=yourpassword123
-    networks:
-      - dotnest
-      - dotnest-database
-    restart: unless-stopped
-
-  dotnest-postgres:
-    networks:
-      - dotnest-database

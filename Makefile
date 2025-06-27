@@ -1,21 +1,10 @@
-.PHONY: up down pull build config
-
-include docker-compose.mk
+.PHONY: up down debug
 
 up:
-	docker compose $(DOTNEST_COMPOSE_ARGS) up --build -d --remove-orphans
+	docker compose --profile nginx up --build -d --remove-orphans
 
 down:
-	docker compose $(DOTNEST_COMPOSE_ARGS) down
+	docker compose --profile "*" down
 
 debug:
-	docker compose $(DOTNEST_COMPOSE_ARGS) -f docker-compose.debug.yml up --build -d
-
-pull:
-	docker compose $(DOTNEST_COMPOSE_ARGS) pull
-
-build:
-	docker compose $(DOTNEST_COMPOSE_ARGS) build
-
-config:
-	docker compose $(DOTNEST_COMPOSE_ARGS) config
+	docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build -d

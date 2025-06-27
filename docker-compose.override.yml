@@ -1,0 +1,15 @@
+services:
+
+  dotnest:
+    depends_on:
+      - dotnest-postgres
+    environment:
+      ConnectionStrings__Postgres: Host=dotnest-postgres;Port=5432;Database=dotnest;Username=dotnest;Password=yourpassword123
+    networks:
+      - dotnest
+      - dotnest-database
+    restart: unless-stopped
+
+  dotnest-postgres:
+    networks:
+      - dotnest-database
